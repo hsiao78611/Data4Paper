@@ -18,15 +18,18 @@ class Campaign:
         self.ks_link = ks_link
         self.id = id
 
+        # need using random order
+
         # Speeding up BeautifulSoup by using SoupStrainer and lxml parser
         session = requests.Session()
         response = session.get(ks_link)
         strainer = SoupStrainer('main', attrs = {'role' : 'main'})
         proj_soup = BeautifulSoup(response.content, 'lxml', parse_only = strainer)
 
-
+        # projects
         self.proj = proj_soup
         print 'finished project soup'
+
 
         # rewards
         # self.rew = soup_proj.find_all(class_ = 'hover-group')
@@ -34,6 +37,7 @@ class Campaign:
         rew_soup = BeautifulSoup(response.content, 'lxml', parse_only = strainer)
         self.rew = rew_soup
         print 'finished rewards soup'
+
 
         # updates
         # link_upd = urllib.urlopen(ks_link + '/updates')
@@ -44,6 +48,7 @@ class Campaign:
 
         self.upd = upd_soup
         print 'finished updates soup'
+
 
         # comments..... it needs more time for loading order comments by web driver
         load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
