@@ -1,10 +1,12 @@
-import ks.main_crawler
-from random import randint
-import pandas as pd
 import os
+import sqlite3
 import time
 from datetime import datetime
-import sqlite3
+from random import randint
+
+import pandas as pd
+
+import ks.individual.proj_crawler
 
 # the list is crawled by GoogleScraper and precessed by ProjectList.py
 proj_list = ['https://www.kickstarter.com/projects/312002206/the-worlds-smallest-garden-0'
@@ -33,10 +35,12 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db')
 
 for id in range(len(proj_list)):
     proj_id = 'proj_' + str(id_start_from + id)
+
+    # used to record processing time
     start_time = time.time()
 
 
-    proj = ks.main_crawler.Campaign(proj_list[id], id_start_from + id)
+    proj = ks.individual.proj_crawler.Campaign(proj_list[id], id_start_from + id)
     print 'loading ' + proj_id + ': ' + proj_list[id]
 
     # dataframe
@@ -48,19 +52,12 @@ for id in range(len(proj_list)):
     print exe_time
     df_time = pd.DataFrame({'proj_id': [proj_id], 'exe_time': [exe_time]})
 
-    # save to 'csv'
-    # save(df_proj, 'projects.csv')
-    # save(df_rew, 'rewards.csv')
-    # save(df_upd, 'updates.csv')
-    # save(df_cmt, 'comments.csv')
-    # save(df_time, 'exe_time.csv')
-
     # save to 'sqlite'
     df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
     df_rew.to_sql(name = 'rewards', con = conn_rew, if_exists = 'append', index = False)
     df_upd.to_sql(name = 'updates', con = conn_upd, if_exists = 'append', index = False)
     df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
-    exe_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
+    df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
 
     time.sleep(randint(1, 5))
 

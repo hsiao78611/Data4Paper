@@ -2,19 +2,22 @@
 Adapted from: https://gist.github.com/KhepryQuixote/46cf4f3b999d7f658853
 Python script to connect to Tor via Stem and Privoxy, requesting a new connection (hence a new IP as well) as desired.
 '''
-
-import stem
-import stem.connection
-
 import time
 import urllib2
 
 from stem import Signal
 from stem.control import Controller
 
+from selenium import webdriver
+from bs4 import BeautifulSoup, SoupStrainer
+
+import ks.utils.useragents as ua
+from random import randint
+
 # initialize some HTTP headers
 # for later usage in URL requests
-user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7'
+agents = ua.get_user_agents()
+user_agent = list(agents)[randint(0, len(agents))]
 headers={'User-Agent':user_agent}
 
 # initialize some
@@ -41,7 +44,7 @@ def request(url):
     # request a URL
     # via the proxy
     _set_urlproxy()
-    request=urllib2.Request(url, None, headers)
+    request = urllib2.Request(url, None, headers)
     return urllib2.urlopen(request).read()
 
 # signal TOR for a new connection
@@ -95,3 +98,13 @@ for i in range(0, nbrOfIpAddresses):
     # new IP address
     print ("")
     print ("newIP: %s" % newIP)
+
+# using webdriver
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('user-agent='+user_agent)
+chrome_options.add_argument('--proxy-server=http://127.0.0.1:8118')
+
+driver = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
+driver.get('http://ipinfo.io/ip/')
+print driver.execute_script('return navigator.userAgent')
+print BeautifulSoup(driver.page_source, 'lxml').text

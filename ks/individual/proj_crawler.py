@@ -1,19 +1,22 @@
-from bs4 import BeautifulSoup, SoupStrainer
 import requests
+from bs4 import BeautifulSoup, SoupStrainer
+
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from random import randint
-import urllib
-import time
+from selenium.webdriver.support.ui import WebDriverWait
 
-from ks.df_project import df_project
-from ks.df_rewards import df_rewards
-from ks.df_updates import df_updates
-from ks.df_comments import df_comments
+import time
+from random import randint
+
+from ks.individual.df_comments import df_comments
+from ks.individual.df_project import df_project
+from ks.individual.df_rewards import df_rewards
+from ks.individual.df_updates import df_updates
+
 
 class Campaign:
+
     def __init__(self, ks_link, id = 0):
         self.ks_link = ks_link
         self.id = id
@@ -23,8 +26,8 @@ class Campaign:
         # Speeding up BeautifulSoup by using SoupStrainer and lxml parser
         session = requests.Session()
         response = session.get(ks_link)
-        strainer = SoupStrainer('main', attrs = {'role' : 'main'})
-        proj_soup = BeautifulSoup(response.content, 'lxml', parse_only = strainer)
+        strainer = SoupStrainer('main', attrs={'role':'main'})
+        proj_soup = BeautifulSoup(response.content, 'lxml', parse_only=strainer)
 
         # projects
         self.proj = proj_soup
@@ -33,8 +36,8 @@ class Campaign:
 
         # rewards
         # self.rew = soup_proj.find_all(class_ = 'hover-group')
-        strainer = SoupStrainer('div', class_ = 'NS_projects__rewards_list js-project-rewards')
-        rew_soup = BeautifulSoup(response.content, 'lxml', parse_only = strainer)
+        strainer = SoupStrainer('div', class_='NS_projects__rewards_list js-project-rewards')
+        rew_soup = BeautifulSoup(response.content, 'lxml', parse_only=strainer)
         self.rew = rew_soup
         print 'finished rewards soup'
 
@@ -43,8 +46,8 @@ class Campaign:
         # link_upd = urllib.urlopen(ks_link + '/updates')
         # soup_upd = BeautifulSoup(link_upd, 'html.parser')
         response = session.get(ks_link + '/updates')
-        strainer = SoupStrainer('div', class_ = 'timeline')
-        upd_soup = BeautifulSoup(response.content, 'lxml', parse_only = strainer)
+        strainer = SoupStrainer('div', class_='timeline')
+        upd_soup = BeautifulSoup(response.content, 'lxml', parse_only=strainer)
 
         self.upd = upd_soup
         print 'finished updates soup'
@@ -66,10 +69,8 @@ class Campaign:
             try:
                 driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
                 load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
-                time.sleep(randint(1, 3))
-
                 load_more_button.click()
-                time.sleep(randint(1, 5))
+                time.sleep(randint(1, 3))
             except Exception as e:
                 # driver.save_screenshot('screenshot.png') # for debugging
                 # print e
