@@ -60,14 +60,14 @@ class Category:
                 load_more_button.click()
                 # wait for loading more projects
                 time.sleep(randint(5, 10))
-                button_visiable = load_more_button.is_displayed()
-                count_visible_project =  len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
             except Exception as e:
                 # driver.save_screenshot('screenshot.png') # for debugging
-                e # i don't want to see it.
+                print e
                 # break
 
             # track the state
+            button_visiable = load_more_button.is_displayed()
+            count_visible_project = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
             if count_visible_project != temp_count:
                 print str(self.total) +'-'+ str(count_scroll) +'-'+ str(count_visible_project)
                 temp_count = count_visible_project
