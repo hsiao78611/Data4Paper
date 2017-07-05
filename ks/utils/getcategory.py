@@ -1,15 +1,16 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
 import pandas as pd
+import re
 
-ks_link = 'https://www.kickstarter.com/discover/advanced?ref=discovery_overlay'
+ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id=1&sort=end_date&seed=2498718&page=1'
 
 session = requests.Session()
 response = session.get(ks_link)
-strainer = SoupStrainer('div', class_='root-categories')
+strainer = SoupStrainer('div', class_='subcategories_container full-height absolute border-box pt3 pt5-sm pb3 pb7-sm pl3 pl7-sm pr3 pr5-sm')
 cat_soup = BeautifulSoup(response.content, 'lxml', parse_only=strainer)
 
-cats = cat_soup.find_all('li', class_='category')
+cats = cat_soup.find_all('li', class_='subcategory')
 
 def get_category():
     df = pd.DataFrame({'category': [], 'id': []})
@@ -17,7 +18,7 @@ def get_category():
     for i in range(len(cats)):
         try:
             cat = cats[i].find('a').text
-            id = cats[i].find('a').get('data-id')
+            id = re.search(r'\"id\":(.*)', cats[i].get('data-category')).group(1).split(',')[0]
         except Exception as e:
             print e
             break

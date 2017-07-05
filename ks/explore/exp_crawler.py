@@ -11,14 +11,18 @@ import pandas as pd
 
 import ks.utils.useragents as ua
 
-ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id={}&sort=end_date&seed=2498402&page=1'
+ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id={}&goal={}&sort=end_date&seed={}&page=1'
 load_more_button_Xpath = '//*[@id="projects"]/div/div[2]/a'
 
 
 class Category:
 
-    def __init__(self, id):
+    def __init__(self, id, goal):
         self.id = id
+        self.goal = goal
+
+        # set a random seed number
+        rand_seed = randint(2000001, 2999999)
 
         # get a new agent
         agents = ua.get_user_agents()
@@ -36,7 +40,7 @@ class Category:
         now_ip = BeautifulSoup(driver.page_source, 'lxml').text
         print now_ip
         # driver.set_window_size(1000, 1200) # set the browser size in order to click the button
-        driver.get(ks_link.format(id))
+        driver.get(ks_link.format(id, goal, rand_seed))
 
         self.total = int(re.sub('[^\d]', '', driver.find_element_by_xpath('//*[@id="projects"]/div/h3/b').text))
 
