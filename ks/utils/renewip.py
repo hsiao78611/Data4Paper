@@ -3,13 +3,6 @@ import time
 from stem import Signal
 from stem.control import Controller
 
-# seconds between
-# IP address checks
-secondsBetweenChecks = 2
-
-oldIP = "0.0.0.0"
-newIP = "0.0.0.0"
-
 def _request(url):
     # communicate with TOR via a local proxy (privoxy)
     def _set_urlproxy():
@@ -24,7 +17,11 @@ def _request(url):
     return urllib2.urlopen(request).read()
 
 def renew_connection():
-    pldIP = _request("http://icanhazip.com/")
+    oldIP = _request("http://icanhazip.com/")
+    newIP = "0.0.0.0"
+    # seconds between
+    # IP address checks
+    secondsBetweenChecks = 2
 
     # signal TOR for a new connection
     with Controller.from_port(port=9051) as controller:

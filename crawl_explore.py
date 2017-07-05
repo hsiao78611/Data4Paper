@@ -30,12 +30,14 @@ for i in range(len(cats)):
     print 'crawling: ' + cat
     start_time = time.time()
     exp = ks.explore.exp_crawler.Category(cat_id)
-    # dataframe
-    df_ov = pd.DataFrame({'category': [cat], 'id': [cat_id], 'total': [exp.total], 'exe_time': [exe_time]})
-    df_exp = exp.get_link()
+
     # calculate processing time
     exe_time = time.time() - start_time
     print exe_time
+
+    # dataframe
+    df_ov = pd.DataFrame({'category': [cat], 'id': [cat_id], 'total': [exp.total], 'exe_time': [exe_time]})
+    df_exp = exp.get_link()
 
     # save to 'sqlite'
     df_ov.to_sql(name='rewards', con=conn_ov, if_exists='append', index=False)

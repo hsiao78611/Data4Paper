@@ -1,5 +1,9 @@
 from bs4 import BeautifulSoup, SoupStrainer
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 import re
 import time
 from random import randint
@@ -9,13 +13,16 @@ import ks.utils.useragents as ua
 
 ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id={}&sort=end_date&seed=2498402&page=1'
 load_more_button_Xpath = '//*[@id="projects"]/div/div[2]/a'
-agents = ua.get_user_agents()
-user_agent = list(agents)[randint(0, len(agents))]
+
 
 class Category:
 
     def __init__(self, id):
         self.id = id
+
+        # get a new agent
+        agents = ua.get_user_agents()
+        user_agent = list(agents)[randint(0, len(agents))]
 
         # setup webdriver
         chrome_options = webdriver.ChromeOptions()
@@ -28,21 +35,29 @@ class Category:
         # check ip address
         now_ip = BeautifulSoup(driver.page_source, 'lxml').text
         print now_ip
-
+        # driver.set_window_size(1000, 1200) # set the browser size in order to click the button
         driver.get(ks_link.format(id))
 
         self.total = int(re.sub('[^\d]', '', driver.find_element_by_xpath('//*[@id="projects"]/div/h3/b').text))
 
-        while True:
+        count_visible_project = 0
+        button_location = 6600
+        each_scroll = 6634
+        count_scroll = 0
+
+        while count_visible_project != self.total:
             try:
-                driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+                driver.execute_script('window.scrollTo(0,'+str(button_location+each_scroll*count_scroll)+');') # document.body.scrollHeight);')
+                count_scroll = count_scroll + 1
                 load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
                 load_more_button.click()
-                time.sleep(randint(1, 3))
+                # wait for loading more projects
+                time.sleep(randint(5, 10))
+                count_visible_project =  len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
             except Exception as e:
                 # driver.save_screenshot('screenshot.png') # for debugging
-                # print e
-                break
+                e # i don't want to see it.
+                # break
         # wait for results to appear
         time.sleep(randint(1, 3))
 
@@ -76,7 +91,7 @@ class Category:
                 backers = self.plist[i].get('data-project_backers_count')
                 percent = self.plist[i].get('data-project_percent_raised')
                 link = self.plist[i].find('a').get('href').split('?')[0]
-                category = self.plist[i].find_all('a')[1].text
+                category = re.sub('^https://www.kickstarter.com/discover/categories/', '', self.plist[i].find_all('a')[1].get('href').split('?')[0])
                 title = re.sub('[:$]', '',self.plist[0].find_all('a')[2].text)
                 creater = self.plist[i].find_all('span')[1].text
                 c_link = self.plist[i].find_all('a')[3].get('href')
