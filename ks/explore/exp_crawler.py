@@ -47,9 +47,12 @@ class Category:
         count_visible_project = 0
         button_location = 6600
         each_scroll = 6634
-        count_scroll = 0
 
-        while count_visible_project != self.total:
+        button_visiable = True
+        count_scroll = 0
+        temp_count = 0
+
+        while button_visiable:
             try:
                 driver.execute_script('window.scrollTo(0,'+str(button_location+each_scroll*count_scroll)+');') # document.body.scrollHeight);')
                 count_scroll = count_scroll + 1
@@ -62,9 +65,12 @@ class Category:
                 # driver.save_screenshot('screenshot.png') # for debugging
                 e # i don't want to see it.
                 # break
+
             # track the state
-            print self.total
-            print count_visible_project
+            if count_visible_project != temp_count:
+                print str(self.total) +'-'+ str(count_scroll) +'-'+ str(count_visible_project)
+                temp_count = count_visible_project
+
             if driver.current_url.split('=')[-1] == 200:
                 break
 
