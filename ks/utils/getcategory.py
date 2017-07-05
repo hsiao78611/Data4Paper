@@ -18,7 +18,7 @@ def get_category():
     for i in range(len(cats)):
         try:
             cat = cats[i].find('a').text
-            id = re.search(r'\"id\":(.*)', cats[i].get('data-category')).group(1).split(',')[0]
+            id = re.search('(?<=id\":)\d+', cats[i].get('data-category')).group(1).split(',')[0]
         except Exception as e:
             print e
             break
