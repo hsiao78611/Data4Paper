@@ -12,7 +12,7 @@ import pandas as pd
 import ks.utils.useragents as ua
 
 ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id={}&goal={}&sort=end_date&seed={}&page=1'
-load_more_button_Xpath = '//*[@id="projects"]/div/div[2]/a'
+load_more_button_Xpath = '//*[@id="projects"]/div/div[2]'
 
 
 class Category:
@@ -48,11 +48,11 @@ class Category:
         button_location = 6600
         each_scroll = 6634
 
-        button_visiable = True
+        button_visiable = ''
         count_scroll = 0
         temp_count = 0
 
-        while button_visiable:
+        while button_visiable != 'display: none;':
             try:
                 driver.execute_script('window.scrollTo(0,'+str(button_location+each_scroll*count_scroll)+');') # document.body.scrollHeight);')
                 count_scroll = count_scroll + 1
@@ -66,7 +66,7 @@ class Category:
                 # break
 
             # track the state
-            button_visiable = load_more_button.is_displayed()
+            button_visiable = load_more_button.get_attribute('style') # .is_displayed() may occur error
             count_visible_project = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
             if count_visible_project != temp_count:
                 print str(self.total) +'-'+ str(count_scroll) +'-'+ str(count_visible_project)
