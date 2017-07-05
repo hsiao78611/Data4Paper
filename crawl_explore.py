@@ -24,13 +24,13 @@ conn_exp = sqlite3.connect(directory + '/' + 'explore.db')
 
 # start explore each category
 for i in range(len(cats)):
-    for goal in range(4):
+    for goal in range(5):
         cat = cats.iloc[i][0]
         cat_id = cats.iloc[i][1]
 
         print 'crawling: ' + cat
         start_time = time.time()
-        exp = ks.explore.exp_crawler.Category(cat_id, goal+1)
+        exp = ks.explore.exp_crawler.Category(cat_id, goal)
 
         # calculate processing time
         exe_time = time.time() - start_time

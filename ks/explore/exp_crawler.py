@@ -62,8 +62,11 @@ class Category:
                 # driver.save_screenshot('screenshot.png') # for debugging
                 e # i don't want to see it.
                 # break
-        # wait for results to appear
-        time.sleep(randint(1, 3))
+            # track the state
+            print self.total
+            print count_visible_project
+            if driver.current_url.split('=')[-1] == 200:
+                break
 
         # make a soup then sleep
         strainer = SoupStrainer('div', attrs={'id':'projects_list'})
