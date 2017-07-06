@@ -25,8 +25,6 @@ def _scroll_down(driver, load_more_button_Xpath, count_scroll, exception):
             print e
     # wait for loading more projects
     time.sleep(randint(5, 10))
-
-
     return [count_scroll, exception, button_visiable]
 
 
