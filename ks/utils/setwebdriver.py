@@ -3,7 +3,7 @@ from selenium import webdriver
 import ks.utils.useragents as ua
 
 
-def set_driver(self, width, height):
+def set_driver(width, height):
     '''
     using tor via privoxy
     options are referred to: https://s2.smu.edu/~jwadleigh/seltest/
