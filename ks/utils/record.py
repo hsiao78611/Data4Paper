@@ -1,11 +1,5 @@
 import json
 import os
-from .alnum import get_current_date
-
-
-USER_AGENTS_URL = (
-    'https://techblog.willshouse.com/2012/01/03/most-common-user-agents/'
-)
 
 class Record:
 
@@ -46,4 +40,4 @@ class Record:
 
         return df
 
-        # return set(user_agents['useragents'])
+        # return set(df['id'])
