@@ -26,7 +26,7 @@ class Category:
             # get total projects number in the category
             self.total = int(re.sub('[^\d]', '', driver.find_element_by_xpath('//*[@id="projects"]/div/h3/b').text))
             # scroll down repeatedly until it cannot load more data
-            sc.scrolldown_explore(driver)
+            sc.scroll_down_explore(driver, self.total)
 
         # make a soup then sleep
         strainer = SoupStrainer('div', attrs={'id':'projects_list'})
