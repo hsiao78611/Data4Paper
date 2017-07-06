@@ -10,7 +10,7 @@ def set_driver(width, height):
     '''
     # get a new agent
     agents = ua.get_user_agents()
-    user_agent = list(agents)[randint(0, len(agents))]
+    user_agent = list(agents)[randint(0, len(agents)-1)]
 
     # setup webdriver
     chrome_options = webdriver.ChromeOptions()

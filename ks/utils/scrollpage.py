@@ -6,13 +6,14 @@ def _scroll_down(driver, load_more_button_Xpath, count_scroll, count_ex):
     each_scroll = 6634
     scroll_range = button_location+each_scroll*count_scroll
 
-    driver.execute_script('window.scrollTo(0,'+str(scroll_range)+');') # document.body.scrollHeight);')
     if count_ex == 0:
+        driver.execute_script('window.scrollTo(0,' + str(scroll_range) + ');')  # document.body.scrollHeight);')
         count_scroll = count_scroll + 1
     else:
         count_scroll = count_scroll
         # let it scroll back to click button
-        driver.execute_script('window.scrollTo(0,' + str(scroll_range-100) + ');')
+        driver.execute_script('window.scrollTo(0,' + str(scroll_range-500-400) + ');')
+        count_ex = 0
     load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
     button_visiable = load_more_button.get_attribute('style')  # .is_displayed() may occur error
     if button_visiable != 'display: none;':

@@ -36,7 +36,7 @@ while cats_lst:
         cat = cats.iloc[i][0]
         cat_id = cats.iloc[i][1]
 
-        print 'crawling: ' + cat
+        print 'crawling: ' + cat + ' with goal ' + goal
         start_time = time.time()
         exp = ks.explore.exp_crawler.Category(cat_id, goal)
 
@@ -45,7 +45,7 @@ while cats_lst:
         print exe_time
 
         # get dataframe
-        df_ov = pd.DataFrame({'category': [cat], 'id': [cat_id], 'total': [exp.total], 'exe_time': [exe_time]})
+        df_ov = pd.DataFrame({'category': [cat], 'id': [cat_id], 'goal': [goal], 'total': [exp.total], 'exe_time': [exe_time]})
         df_exp = exp.get_exp()
 
         # save to 'sqlite'
