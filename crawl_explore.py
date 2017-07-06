@@ -29,7 +29,7 @@ random.shuffle(cats_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('explore')
+record = rec.Record('record_explore')
 rec_df = record.get_record()
 if rec_df != False:
     rec_index = set(rec_df['index'])
