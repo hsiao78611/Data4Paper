@@ -21,7 +21,7 @@ class Campaign:
         self.ks_link = ks_link
         self.id = id
 
-        # need using random order
+        # need using random order?
 
         # Speeding up BeautifulSoup by using SoupStrainer and lxml parser
         session = requests.Session()
