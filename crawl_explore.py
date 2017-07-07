@@ -31,10 +31,10 @@ random.shuffle(cats_lst)
 # then remove(pop) the index of crawled data
 record = rec.Record('record_explore')
 rec_df = record.get_record()
-if rec_df != False:
-    rec_index = set(rec_df['index'])
+if not rec_df.empty:
+    rec_index = list(set(list(rec_df['index'])))
     while rec_index:
-        cats_lst.pop(rec_index.pop())
+        cats_lst.remove(rec_index.pop())
 
 while cats_lst:
     i = cats_lst.pop()

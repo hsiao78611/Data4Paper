@@ -19,7 +19,7 @@ class Record:
             'exp_num': [exp_num],
             'get_num': [get_num]
         })
-        df.to_sql(name='rec_explore', con=self.conn, if_exists='append', index=False)
+        df.to_sql(name=self.name, con=self.conn, if_exists='append', index=False)
 
     def get_record(self):
         if not os.path.exists(directory + '/' + self.name + '.db'):

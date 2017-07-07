@@ -40,12 +40,12 @@ random.shuffle(proj_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('record_explore')
+record = rec.Record('record_individual')
 rec_df = record.get_record()
 if rec_df != False:
-    rec_index = set(rec_df['index'])
+    rec_index = list(set(list(rec_df['index'])))
     while rec_index:
-        proj_lst.pop(rec_index.pop())
+        proj_lst.remove(rec_index.pop())
 
 while proj_lst:
     pid = proj_lst.pop()
