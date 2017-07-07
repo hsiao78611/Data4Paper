@@ -6,7 +6,7 @@ class Record:
     def __init__(self, name):
         self.RECORD_FILE = os.path.join(os.path.dirname(__file__), name+'.json')
 
-    def save_user_agents(self, id, index, exp_num, get_num):
+    def save_record(self, id, index, exp_num, get_num):
         df = {
             'id': [], 'index': [],
             'exp_num': [], 'get_num': []

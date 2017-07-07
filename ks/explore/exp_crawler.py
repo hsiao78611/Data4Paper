@@ -6,18 +6,29 @@ import time
 from ks.explore.df_explore import df_explore
 import ks.utils.setwebdriver as sw
 import ks.utils.scrollpage as sc
+import ks.utils.renewip as new
+
 
 ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id={}&goal={}&sort=end_date&seed={}&page=1'
 
 class Category:
 
     def __init__(self, id, goal):
-        # set a web driver
+        # set a web driver with the size
         driver = sw.set_driver(910, 1820)
         # set a random seed number
         rand_seed = randint(2000001, 2999999)
+
         # get the web page
-        driver.get(ks_link.format(id, goal, rand_seed))
+        # NOTE: just renew a web driver if it loading timeout
+        try:
+            driver.get(ks_link.format(id, goal, rand_seed))
+        except  Exception as e:
+            driver.quit()
+            driver = sw.set_driver(910, 1820)
+            new.renew_connection()
+            driver.get(ks_link.format(id, goal, rand_seed))
+            print e
 
         if driver.find_element_by_xpath('//*[@id="NS__empty_states"]').text!='':
             self.total = 0
