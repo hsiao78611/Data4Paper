@@ -33,6 +33,7 @@ class Category:
         if driver.find_element_by_xpath('//*[@id="NS__empty_states"]').text!='':
             self.total = 0
             self.count_visible_item = 0
+            self.list_soup = None
 
         else:
             # get total projects number in the category
@@ -41,10 +42,10 @@ class Category:
             # and get finally visible items
             self.count_visible_item = sc.scroll_down_explore(driver, self.total)
 
-        # make a soup then sleep
-        strainer = SoupStrainer('div', attrs={'id':'projects_list'})
-        self.list_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
-        time.sleep(randint(1, 3))
+            # make a soup then sleep
+            strainer = SoupStrainer('div', attrs={'id':'projects_list'})
+            self.list_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
+            time.sleep(randint(1, 3))
 
         driver.quit()
         print 'finished explore soup'
