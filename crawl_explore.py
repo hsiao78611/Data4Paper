@@ -23,7 +23,7 @@ conn_exp = sqlite3.connect(directory + '/' + 'explore.db')
 # the list is crawled by GoogleScraper and precessed by ProjectList.py
 cats = ks.utils.getcategory.get_category()
 print 'got categories'
-# randomise category order
+# randomise crawling order
 cats_lst = range(len(cats))
 random.shuffle(cats_lst)
 
@@ -64,7 +64,7 @@ while cats_lst:
         df_exp = exp.get_exp()
 
         # record what already be loaded
-        record.save_user_agents(cat_id, i, exp.total, exp.count_visible_item)
+        record.save_record(cat_id, i, exp.total, exp.count_visible_item)
 
         # save to 'sqlite'
         df_ov.to_sql(name='overview', con=conn_ov, if_exists='append', index=False)

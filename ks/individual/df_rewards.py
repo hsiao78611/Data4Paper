@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-def df_rewards(rew_soup, id):
+def df_rewards(rew_soup, pid):
     rew_item = rew_soup.find_all(class_ = 'hover-group')
 
     df = pd.DataFrame(
@@ -20,7 +20,7 @@ def df_rewards(rew_soup, id):
             limit = rew_item[rew].find(class_ = 'pledge__limit')
             ship_info = rew_item[rew].find_all(class_ = 'pledge__detail-info')
 
-            proj_id = 'proj_' + str(id)
+            proj_id = 'proj_' + str(pid)
             rew_number = rew
             rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_ = 'money').text))
             rew_backer_limit = limit.text.strip() if limit != None else None
@@ -29,7 +29,7 @@ def df_rewards(rew_soup, id):
             rew_delivery = rew_item[rew].find("time").get('datetime')
             rew_ships_to = ship_info[1].text.strip().replace('\n', ' ') if len(ship_info) == 2 else None
         except Exception as e:
-            print 'reward '+ str(rew) +' of proj_list ' + str(id) + ' may have a problem.'
+            print 'reward '+ str(rew) +' of proj_list ' + str(pid) + ' may have a problem.'
             print e
             break
 
