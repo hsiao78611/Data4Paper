@@ -12,9 +12,7 @@ import ks.utils.renewip as new
 import ks.utils.record as rec
 
 # the list is crawled by GoogleScraper and precessed by ProjectList.py
-proj_lnks = ['https://www.kickstarter.com/projects/312002206/the-worlds-smallest-garden-0'
-             ,'https://www.kickstarter.com/projects/hello/sense-know-more-sleep-better'
-             ]
+crt_lnks = ['https://www.kickstarter.com/profile/1874897140']
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -37,7 +35,7 @@ conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db')
 conn_time = sqlite3.connect(directory + '/' + 'time.db')
 
 # randomise crawling order
-proj_lst = range(len(proj_lnks))
+proj_lst = range(len(crt_lnks))
 random.shuffle(proj_lst)
 
 # if there exists the record, load it.
@@ -59,7 +57,7 @@ while proj_lst:
     start_time = time.time()
 
     proj = ks.individual.proj_crawler.Campaign(proj_lst[pid], pid)
-    print 'loading ' + proj_id + ': ' + proj_lnks[pid]
+    print 'loading ' + proj_id + ': ' + crt_lnks[pid]
 
     # dataframe
     df_proj = proj.project_rewards()[0]

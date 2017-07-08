@@ -64,7 +64,7 @@ while cats_lst:
         df_exp = exp.get_exp()
 
         # record what already be loaded
-        record.save_record(cat_id, i, exp.total, exp.count_visible_item)
+        record.save_record(cat_id, goal, exp.total, exp.count_visible_item)
 
         # save to 'sqlite'
         df_ov.to_sql(name='overview', con=conn_ov, if_exists='append', index=False)

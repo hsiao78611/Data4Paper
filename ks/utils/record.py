@@ -12,7 +12,7 @@ class Record:
         self.name = name
         self.conn = sqlite3.connect(directory + '/' + name + '.db')
 
-    def save_record(self, id, index, exp_num, get_num):
+    def save_record(self, id, index, exp_num=None, get_num=None):
         df = pd.DataFrame({
             'id': [id],
             'index': [index],

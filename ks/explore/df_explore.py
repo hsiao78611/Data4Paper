@@ -23,8 +23,8 @@ def df_explore(list_soup):
                 backers = plist[i].get('data-project_backers_count')
                 percent = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]
-                category = re.sub('^https://www.kickstarter.com/discover/categories/', '', plist[i].find_all('a')[1].get('href').split('?')[0])
-                title = re.sub('[:$]', '', plist[0].find_all('a')[2].text)
+                category = re.sub('^https://www.kickstarter.com/discover/categories/', '', plist[i].find_all('a')[1].get('href')).split('?')[0]
+                title = re.sub('[:$]', '', plist[i].find_all('a')[2].text)
                 creater = plist[i].find_all('span')[1].text
                 c_link = plist[i].find_all('a')[3].get('href')
             except Exception as e:

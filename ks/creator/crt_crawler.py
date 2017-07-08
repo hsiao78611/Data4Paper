@@ -14,25 +14,25 @@ from ks.individual.df_project import df_project
 from ks.individual.df_rewards import df_rewards
 from ks.individual.df_updates import df_updates
 
+# get a random agent
+agents_lst = ua.get_user_agents()
+user_agent = list(agents_lst)[randint(0, len(agents_lst) - 1)]
+headers = {'User-Agent': user_agent}
 
-class Campaign:
+class Creator:
 
     def __init__(self, ks_link, pid = 0):
         self.ks_link = ks_link
         self.pid = pid
-
-        # get a random agent
-        agents_lst = ua.get_user_agents()
-        user_agent = list(agents_lst)[randint(0, len(agents_lst) - 1)]
-        self.headers = {'User-Agent': user_agent}
-
+        total_cmt = 0
+        count_visible_cmt = 0
         # communicate with TOR via a local proxy (privoxy)
         new.renew_connection()
 
     # need using random order?
     def project_rewards(self):
         # Speeding up BeautifulSoup by using SoupStrainer and lxml parser
-        request = urllib2.Request(self.ks_link, None, self.headers)
+        request = urllib2.Request(self.ks_link, None, headers)
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('main', attrs={'role': 'main'})
         proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
@@ -48,7 +48,7 @@ class Campaign:
         return [df_project(proj_soup, self.pid), df_rewards(rew_soup, self.pid)]
 
     def updates(self):
-        request = urllib2.Request(self.ks_link + '/updates', None, self.headers)
+        request = urllib2.Request(self.ks_link + '/updates', None, headers)
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('div', class_='timeline')
         upd_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
@@ -58,7 +58,7 @@ class Campaign:
         return df_updates(upd_soup, self.pid)
 
     def faqs(self):
-        request = urllib2.Request(self.ks_link + '/faqs', None, self.headers)
+        request = urllib2.Request(self.ks_link + '/faqs', None, headers)
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('ul', class_='faqs col-8')
         faq_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
