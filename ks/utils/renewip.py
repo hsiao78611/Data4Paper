@@ -23,7 +23,6 @@ def _request(url):
 
 def renew_connection():
     oldIP = _request("http://icanhazip.com/")
-    newIP = "0.0.0.0"
     # seconds between
     # IP address checks
     secondsBetweenChecks = 2
@@ -33,6 +32,7 @@ def renew_connection():
         controller.authenticate(password='my_password')
         controller.signal(Signal.NEWNYM)
         controller.close()
+    newIP = _request("http://icanhazip.com/")
 
     # elapsed seconds
     seconds = 0

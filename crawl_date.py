@@ -51,7 +51,6 @@ while proj_lst:
     user_agent = list(agents_lst)[randint(0, len(agents_lst) - 1)]
     headers = {'User-Agent': user_agent}
 
-    print proj_lnks[pid]
     request = urllib2.Request(proj_lnks[pid], None, headers)
     response = urllib2.urlopen(request)
     strainer = SoupStrainer('main', attrs={'role': 'main'})
@@ -64,7 +63,7 @@ while proj_lst:
     rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
     rew_item = rew_soup.find_all(class_ = 'hover-group')
 
-    df = pd.DataFrame({
+    df_rew = pd.DataFrame({
         'proj_id': [],
         'rew_number': [],
         'rew_amount_required': [],
@@ -79,7 +78,8 @@ while proj_lst:
         rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_='money').text))
         rew_backer_limit = limit.text.strip() if limit != None else None
         rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_='pledge__backer-count').text))
-        rew_delivery = rew_item[rew].find("time").get('datetime')
+        ed_date = rew_item[rew].find("time")
+        rew_delivery = ed_date.get('datetime') if ed_date != None else None
 
         rew_temp = pd.DataFrame({
             'proj_id': [proj_id],
@@ -89,14 +89,15 @@ while proj_lst:
             'rew_backer_count': [rew_backer_count],
             'rew_delivery': [rew_delivery],
             })
-        df_rew = df.append(rew_temp)
+        df_rew = df_rew.append(rew_temp)
 
     # dataframe
-    df_proj = pd.DataFrame(
-        {'proj_id': [proj_id],
-         'proj_start_date': [proj_start_date],
-         'proj_end_date': [proj_end_date],
-         })
+    df_proj = pd.DataFrame({
+        'proj_id': [proj_id],
+        'proj_url': [proj_lnks[pid]],
+        'proj_start_date': [proj_start_date],
+        'proj_end_date': [proj_end_date],
+        })
 
     # record what already be loaded
     count_num = count_num + 1

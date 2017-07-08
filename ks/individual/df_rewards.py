@@ -26,7 +26,8 @@ def df_rewards(rew_soup, pid):
             rew_backer_limit = limit.text.strip() if limit != None else None
             rew_description = rew_item[rew].find_all("p")[1].text
             rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_ = 'pledge__backer-count').text))
-            rew_delivery = rew_item[rew].find("time").get('datetime')
+            ed_date = rew_item[rew].find("time")
+            rew_delivery = ed_date.get('datetime') if ed_date != None else None
             rew_ships_to = ship_info[1].text.strip().replace('\n', ' ') if len(ship_info) == 2 else None
         except Exception as e:
             print 'reward '+ str(rew) +' of proj_list ' + str(pid) + ' may have a problem.'
