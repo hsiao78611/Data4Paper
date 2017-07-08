@@ -33,14 +33,15 @@ random.shuffle(proj_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
+count_num = 0
 record = rec.Record('record_date')
 rec_df = record.get_record()
-if rec_df != False:
+if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
+    count_num = len(rec_index)
     while rec_index:
         proj_lst.remove(rec_index.pop())
 
-count_num = 0
 while proj_lst:
     pid = proj_lst.pop()
     # make an identification

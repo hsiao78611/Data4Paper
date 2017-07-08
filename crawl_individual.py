@@ -44,7 +44,7 @@ random.shuffle(proj_lst)
 # then remove(pop) the index of crawled data
 record = rec.Record('record_individual')
 rec_df = record.get_record()
-if rec_df != False:
+if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
     while rec_index:
         proj_lst.remove(rec_index.pop())
