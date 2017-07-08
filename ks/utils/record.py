@@ -22,7 +22,8 @@ class Record:
         df.to_sql(name=self.name, con=self.conn, if_exists='append', index=False)
 
     def get_record(self):
-        if not os.path.exists(directory + '/' + self.name + '.db'):
+        tb_exists = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + self.name + "'"
+        if not self.conn.execute(tb_exists).fetchone():
             return False
 
         df = pd.read_sql_query('SELECT * FROM ' + self.name, self.conn)
