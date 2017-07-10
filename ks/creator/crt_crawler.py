@@ -9,10 +9,10 @@ import ks.utils.scrollpage as sc
 import ks.utils.setwebdriver as sw
 import ks.utils.useragents as ua
 from ks.individual.df_comments import df_comments
-from ks.individual.df_faqs import df_faqs
-from ks.individual.df_project import df_project
-from ks.individual.df_rewards import df_rewards
-from ks.individual.df_updates import df_updates
+from ks.creator.df_about import df_about
+from ks.creator.df_backed import df_backed
+from ks.creator.df_created import df_created
+from ks.creator.df_comments import df_comments
 
 # get a random agent
 agents_lst = ua.get_user_agents()
@@ -37,7 +37,8 @@ class Creator:
         return df_about(abt_soup, self.cid)
 
     #
-    # it has load more button
+    # it may have load more button
+    # such as superbacker: https://www.kickstarter.com/profile/859880747
     #
     def backed(self):
         request = urllib2.Request(self.crt_link, None, headers)
@@ -47,6 +48,7 @@ class Creator:
         print 'finished backed soup'
         return df_backed(bac_soup, self.cid)
 
+    # it needs webdriver
     def created(self):
         request = urllib2.Request(self.crt_link + '/created', None, headers)
         response = urllib2.urlopen(request)
@@ -56,7 +58,7 @@ class Creator:
         return df_created(crt_soup, self.cid)
 
     #
-    # it has load more button
+    # it may have load more button
     #
     def comments(self):
         # set a web driver with the size

@@ -12,10 +12,6 @@ if not os.path.exists(directory):
 # list of successful projects
 proj_lnks = list(ks.utils.getlink.proj_links()['link'])
 pids = list(ks.utils.getlink.proj_links()['pid'])
-proj_lst = range(len(proj_lnks))
-proj_id = []
-while proj_lst:
-    proj_id = proj_id + ['proj_' + str(proj_lst.pop())]
 
 # for date_funding
 
@@ -27,9 +23,9 @@ proj_id = list(df_fund['proj_id'])
 id = []
 pid = []
 while proj_id:
-    id = id + re.sub('[^\d]', '', proj_id.pop()) # in reverse order
+    id = id + [re.sub('[^\d]', '', proj_id.pop())] # in reverse order
 while id:
-    pid = pid + [id.pop()]
+    pid = pid + [pids[int(id.pop())]]
 
 df_proj = pd.DataFrame({
         'pid': pid,
@@ -47,16 +43,16 @@ rew_proj_id = list(df_rew['proj_id']) # it more than previous one
 id = []
 pid = []
 while rew_proj_id:
-    id = id + re.sub('[^\d]', '', rew_proj_id.pop()) # in reverse order
+    id = id + [re.sub('[^\d]', '', rew_proj_id.pop())] # in reverse order
 while id:
-    pid = pid + [id.pop()]
+    pid = pid + [pids[int(id.pop())]]
 
 rew_temp = pd.DataFrame({
-            'pid': [pid],
-            'rew_id': list(df_rew['rew_id']),
-            'rew_amount_required': list(df_rew['rew_amount']),
+            'pid': pid,
+            'rew_id': list(df_rew['rew_number']),
+            'rew_amount_required': list(df_rew['rew_amount_required']),
             'rew_backer_limit': list(df_rew['rew_backer_limit']),
-            'rew_backer_count': list(df_rew['rew_description']),
+            'rew_backer_count': list(df_rew['rew_backer_count']),
             'rew_delivery': list(df_rew['rew_delivery']),
             })
 

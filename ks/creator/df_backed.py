@@ -1,54 +1,51 @@
 import pandas as pd
 import re
 
-def df_backed(proj_soup, pid):
-    try:
-        proj_id = 'proj_'+str(pid)
-        proj_title = proj_soup.find('a', class_ = 'hero__link').text
-            # soup_proj.find('meta', attrs={'property': 'og:title'}).get('content')
-        proj_description = proj_soup.find_all('span', class_ = 'relative')[1].text.strip()
-            # soup_proj.find('meta', attrs={'property': 'og:description'}).get('content')
-        proj_url = 'https: // www.kickstarter.com' + proj_soup.find('a', class_ = 'hero__link').get('href')
-            # soup_proj.find('meta', attrs={'property': 'og:url'}).get('content')
-        proj_goal = int(re.sub('[^\d]', '', proj_soup.find(class_='medium').text))
-        proj_amount_pledged = int(re.sub('[^\d]', '', proj_soup.find('h3', class_='mb0').text))
-        proj_currency = re.search('of (.+?)\d', proj_soup.find(class_='medium').text).group(1)
-        proj_start_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.get('datetime')
-        proj_end_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.find_next().get('datetime')
-        proj_category = re.split('/|\?', proj_soup.find(class_='mr3', href=re.compile('/discover/categories/')).get('href'))[3]
-        proj_subcategory = proj_soup.find(class_='mr3', href=re.compile('/discover/categories/')).text.strip()
-        proj_backer_count = int(re.sub('[^\d]', '', proj_soup.find_all('h3', class_='mb0')[1].text))
-        proj_comment_count = int(re.sub('[^\d]', '', proj_soup.find(class_='js-load-project-comments').text))
-        proj_update_count = int(re.sub('[^\d]', '', proj_soup.find(class_='js-load-project-updates').text))
-        find_faq = proj_soup.find(class_='js-load-project-faqs').findChildren()[0]
-        proj_faq_count = int(re.sub('[^\d]', '', find_faq.text)) if find_faq != None else 0
-        proj_creator_id = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).get('href').split('/')[1]
-            # proj_soup.find('meta', attrs={'property': 'kickstarter:creator'}).get('content').split('/')[-1]
-        proj_creator_name = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).text.strip()
-        proj_location = proj_soup.find(class_ = 'mr3', href=re.compile('/discover/places/')).text.strip()
-    except Exception as e:
-        print 'proj_list '+str(pid)+' may have a problem.'
-        print e
+def df_backed(bac_soup, cid):
 
-    df = pd.DataFrame(
-    {'proj_id': [proj_id],
-     'proj_title': [proj_title],
-     'proj_description': [proj_description],
-     'proj_url': [proj_url],
-     'proj_goal': [proj_goal],
-     'proj_amount_pledged': [proj_amount_pledged],
-     'proj_currency': [proj_currency],
-     'proj_start_date': [proj_start_date],
-     'proj_end_date': [proj_end_date],
-     'proj_category': [proj_category],
-     'proj_subcategory': [proj_subcategory],
-     'proj_backer_count': [proj_backer_count],
-     'proj_comment_count': [proj_comment_count],
-     'proj_update_count': [proj_update_count],
-     'proj_faq_count': [proj_faq_count],
-     'proj_creator_id': [proj_creator_id],
-     'proj_creator_name': [proj_creator_name],
-     'proj_location': [proj_location]
+    df = pd.DataFrame({
+        'cid': [],
+        'pid': [],
+        'backers_count': [],
+        'percent_raised': [],
+        'link': [],
+        'category': [],
+        'title': [],
+        'creator': [],
+        'creator_link': [],
+        'project_state': []
     })
+
+    if bac_soup != None:
+        plist = bac_soup.find_all('div', class_='js-track-project-card')
+
+        for i in range(len(plist)):
+            try:
+                pid = plist[i].get('data-project_pid')
+                backers_count = plist[i].get('data-project_backers_count')
+                percent_raised = plist[i].get('data-project_percent_raised')
+                link = plist[i].find('a').get('href').split('?')[0]
+                category = re.sub('^https://www.kickstarter.com/discover/categories/', '',
+                                  plist[i].find_all('a')[1].get('href')).split('?')[0]
+                title = re.sub('[:$]', '', plist[i].find_all('a')[2].text)
+                project_state = plist[i].get('data-project_state')
+                creator = plist[i].find_all('span')[1].text
+                creator_link = plist[i].find_all('a')[3].get('href')
+            except Exception as e:
+                print e
+
+            df_temp = pd.DataFrame({
+                'cid': [cid],
+                'pid': [pid],
+                'backers_count': [backers_count],
+                'percent_raised': [percent_raised],
+                'link': [link],
+                'category': [category],
+                'title': [title],
+                'project_state': [project_state],
+                'creator': [creator],
+                'creator_link': [creator_link]
+            })
+            df = df.append(df_temp)
 
     return df
