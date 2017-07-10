@@ -38,6 +38,8 @@ def renew_connection():
     seconds = 0
     # loop until the "new" IP address
     while oldIP == newIP:
+        if seconds == 30:
+            break
         # sleep this thread
         # for the specified duration
         time.sleep(secondsBetweenChecks)

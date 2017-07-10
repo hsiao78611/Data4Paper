@@ -111,7 +111,8 @@ while proj_lst:
     print 'finished: ' + str(count_num) + ' ' + proj_lnks[pid]
 
     # renew a connection
-    new.renew_connection()
+    if count_num % 50 == 0:
+        new.renew_connection()
 
 conn_date_rew.close()
 conn_date_fund.close()
