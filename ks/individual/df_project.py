@@ -3,7 +3,6 @@ import re
 
 def df_project(proj_soup, pid):
     try:
-        proj_id = 'proj_'+str(pid)
         proj_title = proj_soup.find('a', class_ = 'hero__link').text
             # soup_proj.find('meta', attrs={'property': 'og:title'}).get('content')
         proj_description = proj_soup.find_all('span', class_ = 'relative')[1].text.strip()
@@ -27,11 +26,11 @@ def df_project(proj_soup, pid):
         proj_creator_name = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).text.strip()
         proj_location = proj_soup.find(class_ = 'mr3', href=re.compile('/discover/places/')).text.strip()
     except Exception as e:
-        print 'proj_list '+str(pid)+' may have a problem.'
+        print 'project: ' + pid + 'may have a problem.'
         print e
 
     df = pd.DataFrame(
-    {'proj_id': [proj_id],
+    {'pid': [pid],
      'proj_title': [proj_title],
      'proj_description': [proj_description],
      'proj_url': [proj_url],

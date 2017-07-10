@@ -26,70 +26,49 @@ if not os.path.exists(directory):
 #         df.to_csv(directory + '/' + file_name, mode='a', index=False, header=False, encoding='utf-8-sig')
 
 # Create connections.
-conn_proj = sqlite3.connect(directory + '/' + 'proj.db')
-conn_rew = sqlite3.connect(directory + '/' + 'rew.db')
-conn_upd = sqlite3.connect(directory + '/' + 'upd.db')
-conn_faq = sqlite3.connect(directory + '/' + 'faq.db')
-# conn_crt = sqlite3.connect(directory + '/' + 'crt.db')
-conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db')
-conn_time = sqlite3.connect(directory + '/' + 'time.db')
+conn_about = sqlite3.connect(directory + '/' + 'about.db')
+conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
+conn_created = sqlite3.connect(directory + '/' + 'created.db')
 
 # randomise crawling order
-proj_lst = range(len(crt_lnks))
-random.shuffle(proj_lst)
+crt_lst = range(len(crt_lnks))
+random.shuffle(crt_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('record_individual')
+record = rec.Record('record_creator')
 rec_df = record.get_record()
 if rec_df != False:
     rec_index = list(set(list(rec_df['index'])))
     while rec_index:
-        proj_lst.remove(rec_index.pop())
+        crt_lst.remove(rec_index.pop())
 
-while proj_lst:
-    pid = proj_lst.pop()
-
-    # make an identification
-    proj_id = 'proj_' + str(pid)
+while crt_lst:
+    cid = crt_lst.pop()
 
     # used to record processing time
     start_time = time.time()
 
-    proj = ks.individual.proj_crawler.Campaign(proj_lst[pid], pid)
-    print 'loading ' + proj_id + ': ' + crt_lnks[pid]
+    crt = ks.creator.crt_crawler.Creater(crt_lst[cid], cid)
+    print 'loading ' + cid + ': ' + crt_lnks[cid]
 
     # dataframe
-    df_proj = proj.project_rewards()[0]
-    df_rew = proj.project_rewards()[1]
-    df_upd = proj.updates()
-    df_faq = proj.faqs()
-    # df_crt = proj.creators()
-    df_cmt = proj.comments()
-    exe_time = time.time() - start_time
-    print exe_time
-    df_time = pd.DataFrame({'proj_id': [proj_id], 'exe_time': [exe_time]})
+    df_about = crt.about()
+    df_backed = crt.backed()
+    df_created = crt.created()
 
     # record what already be loaded
-    record.save_record(proj_lst[pid], pid, proj.total_cmt, proj.count_visible_cmt)
+    record.save_record(crt_lst[cid], cid)
 
     # save to 'sqlite'
-    df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
-    df_rew.to_sql(name = 'rewards', con = conn_rew, if_exists = 'append', index = False)
-    df_upd.to_sql(name = 'updates', con = conn_upd, if_exists = 'append', index = False)
-    df_faq.to_sql(name='updates', con=conn_faq, if_exists='append', index=False)
-    # df_crt.to_sql(name='updates', con=conn_crt, if_exists='append', index=False)
-    df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
-    df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
+    df_about.to_sql(name = 'about', con = conn_about, if_exists = 'append', index = False)
+    df_backed.to_sql(name = 'backed', con = conn_backed, if_exists = 'append', index = False)
+    df_created.to_sql(name = 'created', con = conn_created, if_exists = 'append', index = False)
 
     time.sleep(randint(1, 5))
     # renew a connection
     new.renew_connection()
 
-conn_proj.close()
-conn_rew.close()
-conn_upd.close()
-conn_faq.close()
-# conn_crt.close()
-conn_cmt.close()
-conn_time.close()
+conn_about.close()
+conn_backed.close()
+conn_created.close()

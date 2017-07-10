@@ -16,7 +16,8 @@ import ks.utils.useragents as ua
 
 
 # list of successful projects
-proj_lnks = ks.utils.getlink.proj_links()
+proj_lnks = list(ks.utils.getlink.proj_links()['link'])
+pids = list(ks.utils.getlink.proj_links()['pid'])
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -43,16 +44,16 @@ if not rec_df.empty:
         proj_lst.remove(rec_index.pop())
 
 while proj_lst:
-    pid = proj_lst.pop()
+    id = proj_lst.pop()
+    pid = pids[id]
     # make an identification
-    proj_id = 'proj_' + str(pid)
 
     # get a random agent
     agents_lst = ua.get_user_agents()
     user_agent = list(agents_lst)[randint(0, len(agents_lst) - 1)]
     headers = {'User-Agent': user_agent}
 
-    request = urllib2.Request(proj_lnks[pid], None, headers)
+    request = urllib2.Request(proj_lnks[id], None, headers)
     response = urllib2.urlopen(request)
     strainer = SoupStrainer('main', attrs={'role': 'main'})
     proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
@@ -65,8 +66,8 @@ while proj_lst:
     rew_item = rew_soup.find_all(class_ = 'hover-group')
 
     df_rew = pd.DataFrame({
-        'proj_id': [],
-        'rew_number': [],
+        'pid': [],
+        'rew_id': [],
         'rew_amount_required': [],
         'rew_backer_limit': [],
         'rew_backer_count': [],
@@ -75,7 +76,7 @@ while proj_lst:
 
     for rew in range(len(rew_item)):
         limit = rew_item[rew].find(class_ = 'pledge__limit')
-        rew_number = rew
+        rew_id = rew
         rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_='money').text))
         rew_backer_limit = limit.text.strip() if limit != None else None
         rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_='pledge__backer-count').text))
@@ -83,8 +84,8 @@ while proj_lst:
         rew_delivery = ed_date.get('datetime') if ed_date != None else None
 
         rew_temp = pd.DataFrame({
-            'proj_id': [proj_id],
-            'rew_number': [rew_number],
+            'pid': [pid],
+            'rew_id': [rew_id],
             'rew_amount_required': [rew_amount_required],
             'rew_backer_limit': [rew_backer_limit],
             'rew_backer_count': [rew_backer_count],
@@ -94,21 +95,21 @@ while proj_lst:
 
     # dataframe
     df_proj = pd.DataFrame({
-        'proj_id': [proj_id],
-        'proj_url': [proj_lnks[pid]],
+        'pid': [pid],
+        'proj_url': [proj_lnks[id]],
         'proj_start_date': [proj_start_date],
         'proj_end_date': [proj_end_date],
         })
 
     # record what already be loaded
     count_num = count_num + 1
-    record.save_record(proj_lnks[pid], pid, len(rew_item), count_num)
+    record.save_record(proj_lnks[id], id, len(rew_item), count_num)
 
     # save to 'sqlite'
     df_rew.to_sql(name='date_reward', con=conn_date_rew, if_exists='append', index=False)
     df_proj.to_sql(name='date_funding', con=conn_date_fund, if_exists='append', index=False)
 
-    print 'finished: ' + str(count_num) + ' ' + proj_lnks[pid]
+    print 'finished: ' + str(count_num) + ' ' + proj_lnks[id]
 
     # renew a connection
     if count_num % 50 == 0:

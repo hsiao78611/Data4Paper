@@ -13,10 +13,10 @@ def _conn():
 
 def proj_links():
     conn = _conn()
-    df = pd.read_sql_query('SELECT link FROM explore GROUP BY link', conn)
-    return list(df['link'])
+    df = pd.read_sql_query('SELECT link, pid FROM explore GROUP BY link', conn)
+    return df
 
 def crt_links():
     conn = _conn()
-    df = pd.read_sql_query('SELECT c_link FROM explore GROUP BY c_link', conn)
+    df = pd.read_sql_query('SELECT creator_link FROM explore GROUP BY creator_link', conn)
     return list(df['c_link'])

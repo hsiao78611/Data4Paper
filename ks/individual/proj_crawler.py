@@ -17,7 +17,7 @@ from ks.individual.df_updates import df_updates
 
 class Campaign:
 
-    def __init__(self, ks_link, pid = 0):
+    def __init__(self, ks_link, pid):
         self.ks_link = ks_link
         self.pid = pid
 
@@ -66,17 +66,6 @@ class Campaign:
         print 'finished faqs soup'
 
         return df_faqs(faq_soup, self.pid)
-
-    # def creator(self):
-    #     profile = 'https://www.kickstarter.com/profile/'
-    #     request = urllib2.Request(profile + self.crt_id, None, headers)
-    #     response = urllib2.urlopen(request)
-    #     strainer = SoupStrainer()
-    #     crt_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-    #
-    #     print 'finished creator soup'
-    #
-    #     return df_creator(crt_soup, self.pid)
 
     def comments(self):
         # set a web driver with the size
