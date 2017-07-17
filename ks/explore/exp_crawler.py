@@ -14,6 +14,7 @@ ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&catego
 class Category:
 
     def __init__(self, id, goal):
+        self.goal = goal
         # set a web driver with the size
         driver = sw.set_driver(910, 1820)
         # set a random seed number
@@ -51,4 +52,4 @@ class Category:
         print 'finished explore soup'
 
     def get_exp(self):
-        return df_explore(self.list_soup)
+        return df_explore(self.list_soup, self.goal)

@@ -14,7 +14,6 @@ proj_lnks = list(ks.utils.getlink.proj_links()['link'])
 pids = list(ks.utils.getlink.proj_links()['pid'])
 
 # for date_funding
-
 # create connections of database.
 conn_fund = sqlite3.connect(directory + '/' + 'date_fund.db')
 new_conn_fund = sqlite3.connect(directory + '/' + 'new_date_fund.db')
@@ -33,6 +32,8 @@ df_proj = pd.DataFrame({
         'proj_start_date': list(df_fund['proj_start_date']),
         'proj_end_date': list(df_fund['proj_end_date'])
         })
+conn_fund.close()
+new_conn_fund.close()
 
 # for date_reward
 # create connections of database.
@@ -60,7 +61,5 @@ rew_temp = pd.DataFrame({
 df_proj.to_sql(name='date_funding', con=new_conn_fund, if_exists='append', index=False)
 rew_temp.to_sql(name='date_reward', con=new_conn_rew, if_exists='append', index=False)
 
-conn_fund.close()
 conn_rew.close()
-new_conn_fund.close()
 new_conn_rew.close()

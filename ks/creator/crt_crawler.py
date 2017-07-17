@@ -8,6 +8,7 @@ import ks.utils.renewip as new
 import ks.utils.scrollpage as sc
 import ks.utils.setwebdriver as sw
 import ks.utils.useragents as ua
+
 from ks.individual.df_comments import df_comments
 from ks.creator.df_about import df_about
 from ks.creator.df_backed import df_backed
@@ -25,6 +26,9 @@ class Creator:
         self.crt_link = crt_link
         self.cid = cid
 
+        # set a web driver with the size
+        self.driver = sw.set_driver(910, 1820)
+
         # communicate with TOR via a local proxy (privoxy)
         new.renew_connection()
 
@@ -36,53 +40,33 @@ class Creator:
         print 'finished about soup'
         return df_about(abt_soup, self.cid)
 
-    #
-    # it may have load more button
-    # such as superbacker: https://www.kickstarter.com/profile/859880747
-    #
     def backed(self):
-        request = urllib2.Request(self.crt_link, None, headers)
-        response = urllib2.urlopen(request)
+        self.driver.get(self.crt_link)
+        # scroll down until all of projects are visible
+        sc.scroll_down_backed()
         strainer = SoupStrainer('div', class_='mobius_page')
-        bac_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
+        bac_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished backed soup'
+        self.driver.quit()
         return df_backed(bac_soup, self.cid)
 
-    # it needs webdriver
+    # it needs webdriver to get the content derived from javascript
     def created(self):
-        request = urllib2.Request(self.crt_link + '/created', None, headers)
-        response = urllib2.urlopen(request)
+        self.driver.get(self.crt_link + '/created')
         strainer = SoupStrainer('div', class_='grid-row flex flex-wrap')
-        crt_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
+        crt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished created soup'
+        self.driver.quit()
         return df_created(crt_soup, self.cid)
 
-    #
-    # it may have load more button
-    #
+
     def comments(self):
-        # set a web driver with the size
-        driver = sw.set_driver(910, 1820)
         # get the web page
-        driver.get(self.crt_link + '/comments')
-
-        # get total comment number
-        try:
-            self.total_cmt = driver.find_element_by_xpath('//*[@id="main_content"]/div[3]/div/div/div/ul/li[4]/a/span').text
-        except Exception as e:
-            self.total_cmt ='0'
-            print e
-
-        if self.total_cmt == '0':
-            self.count_visible_cmt = 0
-            cmt_soup = None
-        else:
-            # scroll down repeatedly until it cannot load more data
-            # and get finally amount of visible items
-            self.count_visible_cmt = sc.scroll_down_explore(driver, self.total)
-            strainer = SoupStrainer('ul', class_='mobius')
-            cmt_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
-        driver.quit()
+        self.driver.get(self.crt_link + '/comments')
+        # scroll down until all of projects are visible
+        sc.scroll_down_users_comment()
+        strainer = SoupStrainer('ul', class_='mobius')
+        cmt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished comments soup'
-
+        self.driver.quit()
         return df_comments(cmt_soup, self.pid)

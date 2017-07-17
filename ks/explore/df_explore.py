@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-def df_explore(list_soup):
+def df_explore(list_soup, goal):
 
     df = pd.DataFrame({
         'pid': [],
@@ -9,6 +9,7 @@ def df_explore(list_soup):
         'percent_raised': [],
         'link': [],
         'category': [],
+        'goal': [],
         'title': [],
         'creator': [],
         'creator_link': []
@@ -36,6 +37,7 @@ def df_explore(list_soup):
                 'percent_raised': [percent_raised],
                 'link': [link],
                 'category': [category],
+                'goal': [goal],
                 'title': [title],
                 'creator': [creator],
                 'creator_link': [creator_link]
