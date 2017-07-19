@@ -18,8 +18,8 @@ import ks.utils.useragents as ua
 
 
 # list of successful projects
-proj_lnks = list(ks.utils.getlink.proj_links('explore')['proj_url'])
-pids = list(ks.utils.getlink.proj_links('explore')['pid'])
+proj_lnks = list(ks.utils.getlink.proj_links('disj_links')['proj_url'])
+pids = list(ks.utils.getlink.proj_links('disj_links')['pid'])
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -37,7 +37,7 @@ random.shuffle(proj_lst)
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
 count_num = 0
-record = rec.Record('record_date')
+record = rec.Record('record_date_disj')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
@@ -62,19 +62,6 @@ while proj_lst:
     proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
     response.close()
 
-    try:
-        proj_start_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.get('datetime')
-        proj_end_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.find_next().get('datetime')
-    except Exception as e:
-        print e
-        time.sleep(2)
-        proj_start_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.get('datetime')
-        proj_end_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.find_next().get('datetime')
-
-    # reward
-    rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
-    rew_item = rew_soup.find_all(class_ = 'hover-group')
-
     df_rew = pd.DataFrame({
         'pid': [],
         'rew_id': [],
@@ -82,26 +69,56 @@ while proj_lst:
         'rew_backer_limit': [],
         'rew_backer_count': [],
         'rew_delivery': [],
-        })
+    })
 
-    for rew in range(len(rew_item)):
-        limit = rew_item[rew].find(class_ = 'pledge__limit')
-        rew_id = rew
-        rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_='money').text))
-        rew_backer_limit = limit.text.strip() if limit != None else None
-        rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_='pledge__backer-count').text))
-        ed_date = rew_item[rew].find("time")
-        rew_delivery = ed_date.get('datetime') if ed_date != None else None
+    try:
+        proj_start_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.get('datetime')
+        proj_end_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.find_next().get('datetime')
 
-        rew_temp = pd.DataFrame({
-            'pid': [pid],
-            'rew_id': [rew_id],
-            'rew_amount_required': [rew_amount_required],
-            'rew_backer_limit': [rew_backer_limit],
-            'rew_backer_count': [rew_backer_count],
-            'rew_delivery': [rew_delivery],
-            })
-        df_rew = df_rew.append(rew_temp)
+        # reward
+        rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
+        rew_item = rew_soup.find_all(class_ = 'hover-group')
+
+        for rew in range(len(rew_item)):
+            limit = rew_item[rew].find(class_ = 'pledge__limit')
+            rew_id = rew
+            rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_='money').text))
+            rew_backer_limit = limit.text.strip() if limit != None else None
+            rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_='pledge__backer-count').text))
+            ed_date = rew_item[rew].find('time')
+            rew_delivery = ed_date.get('datetime') if ed_date != None else None
+
+            rew_temp = pd.DataFrame({
+                'pid': [pid],
+                'rew_id': [rew_id],
+                'rew_amount_required': [rew_amount_required],
+                'rew_backer_limit': [rew_backer_limit],
+                'rew_backer_count': [rew_backer_count],
+                'rew_delivery': [rew_delivery],
+                })
+            df_rew = df_rew.append(rew_temp)
+    except Exception as e:
+        print e
+        print proj_lnks[id]
+        time.sleep(3)
+        # https://www.kickstarter.com/projects/100105516/particule-a-2-3d-mobile-survival-game-with-multipl
+        try:
+            if proj_soup.find('div', attrs={'id': 'hidden'}) == 'hidden_project':
+                print 'hidden project: ' + proj_lnks[id]
+                rew_temp = pd.DataFrame({
+                    'pid': [pid],
+                    'rew_id': ['hidden project'],
+                    'rew_amount_required': ['hidden project'],
+                    'rew_backer_limit': ['hidden project'],
+                    'rew_backer_count': ['hidden project'],
+                    'rew_delivery': ['hidden project'],
+                })
+                df_rew = df_rew.append(rew_temp)
+                proj_start_date = 'hidden project'
+                proj_end_date = 'hidden project'
+        except Exception as e:
+            print e
+            print 'other exception'
 
     # dataframe
     df_proj = pd.DataFrame({
