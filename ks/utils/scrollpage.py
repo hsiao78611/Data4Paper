@@ -61,10 +61,11 @@ def scroll_down_explore(driver, total):
     button_visiable = ''
     temp_count_visible_item = 0
 
-    while button_visiable != 'display: none;':
+    # while button_visiable != 'display: none;':
+    while temp_count_visible_item != total:
         # control scrolling range by the amount of items
         count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
-        button_location = str(400 + 575 * (count_visible_item / 3))
+        button_location = str(500 * (count_visible_item  / 3))
         # scroll down
         button_visiable = _scroll_down(driver, count_visible_item, load_more_button_Xpath, button_location)
 

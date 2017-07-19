@@ -18,8 +18,8 @@ import ks.utils.useragents as ua
 
 
 # list of successful projects
-proj_lnks = list(ks.utils.getlink.proj_links()['link'])
-pids = list(ks.utils.getlink.proj_links()['pid'])
+proj_lnks = list(ks.utils.getlink.proj_links('explore')['proj_url'])
+pids = list(ks.utils.getlink.proj_links('explore')['pid'])
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

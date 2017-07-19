@@ -24,7 +24,7 @@ class Record:
     def get_record(self):
         tb_exists = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + self.name + "'"
         if not self.conn.execute(tb_exists).fetchone():
-            return False
+            return pd.DataFrame()
 
         df = pd.read_sql_query('SELECT * FROM ' + self.name, self.conn)
         return df

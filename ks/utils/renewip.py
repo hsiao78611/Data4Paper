@@ -22,7 +22,7 @@ def _request(url):
     return urllib2.urlopen(request).read()
 
 def renew_connection():
-    oldIP = _request("http://icanhazip.com/")
+    oldIP = _request("http://ipinfo.io/ip/") # icanhazip.com/")
     # seconds between
     # IP address checks
     secondsBetweenChecks = 2
@@ -32,7 +32,7 @@ def renew_connection():
         controller.authenticate(password='my_password')
         controller.signal(Signal.NEWNYM)
         controller.close()
-    newIP = _request("http://icanhazip.com/")
+    newIP = _request("http://ipinfo.io/ip/") # icanhazip.com/")
 
     # elapsed seconds
     seconds = 0
@@ -46,6 +46,6 @@ def renew_connection():
         # track the elapsed seconds
         seconds += secondsBetweenChecks
         # obtain the current IP address
-        newIP = _request("http://icanhazip.com/")
+        newIP = _request("http://ipinfo.io/ip/") # icanhazip.com/")
         # signal that the program is still awaiting a different IP address
         print ("%d seconds elapsed awaiting a different IP address." % seconds)

@@ -7,7 +7,7 @@ def df_explore(list_soup, goal):
         'pid': [],
         'backers_count': [],
         'percent_raised': [],
-        'link': [],
+        'proj_url': [],
         'category': [],
         'goal': [],
         'title': [],
@@ -23,7 +23,7 @@ def df_explore(list_soup, goal):
                 pid = plist[i].get('data-project_pid')
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
-                link = plist[i].find('a').get('href').split('?')[0]
+                proj_url = plist[i].find('a').get('href').split('?')[0]
                 category = re.sub(r'^https://www.kickstarter.com/discover/categories/', '', plist[i].find_all('a')[1].get('href')).split('?')[0]
                 title = re.sub('[:$]', '', plist[i].find_all('a')[2].text)
                 creator = plist[i].find_all('span')[1].text
@@ -35,7 +35,7 @@ def df_explore(list_soup, goal):
                 'pid': [pid],
                 'backers_count': [backers_count],
                 'percent_raised': [percent_raised],
-                'link': [link],
+                'proj_url': [proj_url],
                 'category': [category],
                 'goal': [goal],
                 'title': [title],
@@ -45,8 +45,3 @@ def df_explore(list_soup, goal):
             df = df.append(df_temp)
 
     return df
-
-    # >>> df.iloc[0][0]
-    # '287'
-    # >>> df.iat[0,0]
-    # '287'

@@ -26,7 +26,7 @@ class Category:
             driver.get(ks_link.format(id, goal, rand_seed))
         except  Exception as e:
             driver.quit()
-            driver = sw.set_driver(910, 1820)
+            driver = sw.set_driver(1050, 1100)
             new.renew_connection()
             driver.get(ks_link.format(id, goal, rand_seed))
             print e
