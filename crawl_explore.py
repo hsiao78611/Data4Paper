@@ -20,7 +20,6 @@ if not os.path.exists(directory):
 conn_ov = sqlite3.connect(directory + '/' + 'overview.db')
 conn_exp = sqlite3.connect(directory + '/' + 'explore.db')
 
-# the list is crawled by GoogleScraper and precessed by ProjectList.py
 cats = ks.utils.getcategory.get_category()
 print 'got categories'
 # randomise crawling order

@@ -62,6 +62,13 @@ while proj_lst:
     proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
     response.close()
 
+    # data frames
+    df_proj = pd.DataFrame({
+        'pid': [],
+        'proj_url': [],
+        'proj_start_date': [],
+        'proj_end_date': [],
+    })
     df_rew = pd.DataFrame({
         'pid': [],
         'rew_id': [],
@@ -103,8 +110,9 @@ while proj_lst:
         time.sleep(3)
         # https://www.kickstarter.com/projects/100105516/particule-a-2-3d-mobile-survival-game-with-multipl
         try:
-            if proj_soup.find('div', attrs={'id': 'hidden'}) == 'hidden_project':
+            if proj_soup.find('div', attrs={'id': 'hidden_project'}).get('id') == 'hidden_project':
                 print 'hidden project: ' + proj_lnks[id]
+                rew_item = []
                 rew_temp = pd.DataFrame({
                     'pid': [pid],
                     'rew_id': ['hidden project'],
@@ -120,7 +128,6 @@ while proj_lst:
             print e
             print 'other exception'
 
-    # dataframe
     df_proj = pd.DataFrame({
         'pid': [pid],
         'proj_url': [proj_lnks[id]],

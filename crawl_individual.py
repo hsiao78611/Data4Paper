@@ -11,6 +11,10 @@ import ks.individual.proj_crawler
 import ks.utils.renewip as new
 import ks.utils.record as rec
 
+from multiprocessing.dummy import Pool  # This is a thread-based Pool
+from multiprocessing import cpu_count
+
+
 # the list is crawled by GoogleScraper and precessed by ProjectList.py
 # proj_lnks = ['https://www.kickstarter.com/projects/312002206/the-worlds-smallest-garden-0'
 #              ,'https://www.kickstarter.com/projects/hello/sense-know-more-sleep-better'
@@ -37,12 +41,13 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db')
 
 
 # list of successful projects
-proj_lnks = list(ks.utils.getlink.proj_links()['link'])
-pids = list(ks.utils.getlink.proj_links()['pid'])
+pid_lnk = ks.utils.getlink.proj_links('all_date_2016')
+proj_lnks = list(pid_lnk['link'])
+pids = list(pid_lnk['pid'])
 
 # randomise crawling order
-proj_lst = range(len(proj_lnks))
-random.shuffle(proj_lst)
+id_lst = range(len(proj_lnks))
+random.shuffle(id_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
@@ -51,16 +56,17 @@ rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
     while rec_index:
-        proj_lst.remove(rec_index.pop())
+        id_lst.remove(rec_index.pop())
 
-while proj_lst:
-    id = proj_lst.pop()
+# while proj_lst:
+def crawler(id):
+    # id = proj_lst.pop()
     pid = pids[id]
 
     # used to record processing time
     start_time = time.time()
 
-    proj = ks.individual.proj_crawler.Campaign(proj_lst[id], pid)
+    proj = ks.individual.proj_crawler.Campaign(proj_lnks[id], pid)
     print 'loading ' + pid + ': ' + proj_lnks[id]
 
     # dataframe
@@ -75,7 +81,7 @@ while proj_lst:
     df_time = pd.DataFrame({'pid': [pid], 'exe_time': [exe_time]})
 
     # record what already be loaded
-    record.save_record(proj_lst[id], id, proj.total_cmt, proj.count_visible_cmt)
+    record.save_record(id_lst[id], id, proj.total_cmt, proj.count_visible_cmt)
 
     # save to 'sqlite'
     df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
@@ -88,6 +94,9 @@ while proj_lst:
     time.sleep(randint(1, 5))
     # renew a connection
     new.renew_connection()
+
+pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
+pool.map(crawler, id_lst)
 
 conn_proj.close()
 conn_rew.close()
