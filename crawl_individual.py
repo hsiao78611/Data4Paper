@@ -10,6 +10,7 @@ import pandas as pd
 import ks.individual.proj_crawler
 import ks.utils.renewip as new
 import ks.utils.record as rec
+import ks.utils.getlink
 
 from multiprocessing.dummy import Pool  # This is a thread-based Pool
 from multiprocessing import cpu_count
@@ -42,7 +43,7 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db')
 
 # list of successful projects
 pid_lnk = ks.utils.getlink.proj_links('all_date_2016')
-proj_lnks = list(pid_lnk['link'])
+proj_lnks = list(pid_lnk['proj_url'])
 pids = list(pid_lnk['pid'])
 
 # randomise crawling order
@@ -58,9 +59,7 @@ if not rec_df.empty:
     while rec_index:
         id_lst.remove(rec_index.pop())
 
-# while proj_lst:
 def crawler(id):
-    # id = proj_lst.pop()
     pid = pids[id]
 
     # used to record processing time
@@ -95,8 +94,14 @@ def crawler(id):
     # renew a connection
     new.renew_connection()
 
-pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
-pool.map(crawler, id_lst)
+# crawling one by one
+while id_lst:
+    id = id_lst.pop()
+    crawler(id)
+
+# crawling by multiprocessing
+# pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
+# pool.map(crawler, id_lst)
 
 conn_proj.close()
 conn_rew.close()
