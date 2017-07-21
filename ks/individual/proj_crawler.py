@@ -75,14 +75,17 @@ class Campaign:
         # get total comment number
         self.total_cmt = int(re.sub('[^\d]', '', driver.find_element_by_xpath(
             '//*[@id="content-wrap"]/div[2]/div/div/div/div[2]/a[5]/span/data').text))
-        if self.total_cmt == '0':
+        if self.total_cmt == 0:
             self.total_cmt = 0
             self.count_visible_cmt = 0
             cmt_soup = None
         else:
             # scroll down repeatedly until it cannot load more data
             # and get finally amount of visible items
-            self.count_visible_cmt = sc.scroll_down_comment(driver, self.self.total_cmt)
+            if self.total_cmt > 50:
+                self.count_visible_cmt = sc.scroll_down_comment(driver, self.total_cmt)
+            else:
+                self.count_visible_cmt = len(driver.find_elements_by_xpath('//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
 
             strainer = SoupStrainer('ol', class_='comments')
             cmt_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)

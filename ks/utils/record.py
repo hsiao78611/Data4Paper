@@ -10,7 +10,7 @@ class Record:
         if not os.path.exists(directory):
             os.makedirs(directory)
         self.name = name
-        self.conn = sqlite3.connect(directory + '/' + name + '.db')
+        self.conn = sqlite3.connect(directory + '/' + name + '.db', timeout=10.0, check_same_thread=False)
 
     def save_record(self, id, index, exp_num=None, get_num=None):
         df = pd.DataFrame({

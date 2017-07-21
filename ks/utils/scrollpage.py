@@ -1,7 +1,7 @@
 import time
 from random import randint
 
-def _scroll_down(driver, count_visible_item, load_more_button_Xpath, button_location):
+def _scroll_down(driver, load_more_button_Xpath, button_location):
     scroll_range = button_location
     # scroll to the position
     driver.execute_script('window.scrollTo(0,' + scroll_range + ');')
@@ -39,13 +39,12 @@ def scroll_down_comment(driver, total):
             return False
 
     while _earliest_comment() == False:
-        count_visible_item = len(driver.find_elements_by_xpath('//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
         button_location = 'document.body.scrollHeight'  # to the bottom
         # scroll down
-        _scroll_down(driver, count_visible_item, load_more_button_Xpath, button_location)
-
+        _scroll_down(driver, load_more_button_Xpath, button_location)
+        count_visible_item = len(driver.find_elements_by_xpath(
+            '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
         # track the state
-        count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
         if count_visible_item != temp_count_visible_item:
             print str(total) + '-' + str(count_visible_item)
             temp_count_visible_item = count_visible_item
@@ -67,7 +66,7 @@ def scroll_down_explore(driver, total):
         count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
         button_location = str(500 * (count_visible_item  / 3))
         # scroll down
-        button_visiable = _scroll_down(driver, count_visible_item, load_more_button_Xpath, button_location)
+        button_visiable = _scroll_down(driver, load_more_button_Xpath, button_location)
 
         # track the state
         count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))

@@ -40,8 +40,7 @@ def df_comments(cmt_soup, pid):
              'cmt_superbaker' : [cmt_superbaker],
              'cmt_content' : [cmt_content]
             })
-
-        df = df.append(cmt_temp)
+            df = df.append(cmt_temp)
 
     return df
 

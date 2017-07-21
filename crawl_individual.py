@@ -33,12 +33,12 @@ if not os.path.exists(directory):
 #         df.to_csv(directory + '/' + file_name, mode='a', index=False, header=False, encoding='utf-8-sig')
 
 # Create connections.
-conn_proj = sqlite3.connect(directory + '/' + 'proj.db')
-conn_rew = sqlite3.connect(directory + '/' + 'rew.db')
-conn_upd = sqlite3.connect(directory + '/' + 'upd.db')
-conn_faq = sqlite3.connect(directory + '/' + 'faq.db')
-conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db')
-conn_time = sqlite3.connect(directory + '/' + 'time.db')
+conn_proj = sqlite3.connect(directory + '/' + 'proj.db', timeout=10.0, check_same_thread=False)
+conn_rew = sqlite3.connect(directory + '/' + 'rew.db', timeout=10.0, check_same_thread=False)
+conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_thread=False)
+conn_faq = sqlite3.connect(directory + '/' + 'faq.db', timeout=10.0, check_same_thread=False)
+conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db', timeout=10.0, check_same_thread=False)
+conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_same_thread=False)
 
 
 # list of successful projects
@@ -90,14 +90,16 @@ def crawler(id):
     df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
     df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
 
-    time.sleep(randint(1, 5))
-    # renew a connection
-    new.renew_connection()
 
 # crawling one by one
+count_num = 0
 while id_lst:
     id = id_lst.pop()
     crawler(id)
+    # renew a connection
+    count_num = count_num + 1
+    if count_num % 1000 == 0:
+        new.renew_connection()
 
 # crawling by multiprocessing
 # pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
