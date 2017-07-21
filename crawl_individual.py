@@ -2,7 +2,6 @@ import os
 import sqlite3
 import time
 from datetime import datetime
-import random
 from random import randint
 import pandas as pd
 
@@ -60,7 +59,6 @@ if not rec_df.empty:
 
 def crawler(id):
     pid = pids[id]
-    crawler.the_queue.put('Doing: ' + str(pid))
     # used to record processing time
     start_time = time.time()
 
@@ -80,15 +78,18 @@ def crawler(id):
     df_time = pd.DataFrame({'pid': [pid], 'exe_time': [exe_time]})
 
     # save to 'sqlite'
-    df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
-    df_rew.to_sql(name = 'rewards', con = conn_rew, if_exists = 'append', index = False)
-    df_upd.to_sql(name = 'updates', con = conn_upd, if_exists = 'append', index = False)
-    df_faq.to_sql(name='faqs', con=conn_faq, if_exists='append', index=False)
-    df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
-    df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
-
-    # record what already be loaded
-    record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
+    def _save_df():
+        df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
+        df_rew.to_sql(name = 'rewards', con = conn_rew, if_exists = 'append', index = False)
+        df_upd.to_sql(name = 'updates', con = conn_upd, if_exists = 'append', index = False)
+        df_faq.to_sql(name='faqs', con=conn_faq, if_exists='append', index=False)
+        df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
+        df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
+        # record what already be loaded
+        record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
+    # put it in a queue then get a permission
+    crawler.q.put(_save_df())
+    the_queue.get()
 
 # crawling one by one
 
@@ -99,15 +100,12 @@ def crawler(id):
 # crawling by multiprocessing
 def worker(queue):
     print os.getpid(),' working'
-    crawler.the_queue = queue
-    for i in range(len(id_lst)):
-        queue.get(True)
-        print os.getpid(), 'got!'
+    crawler.q = queue
 
 try:
     the_queue = Queue()
     pool = Pool(cpu_count() * 2, worker,[the_queue])  # Creates a Pool with cpu_count * 2 threads.
-    pool.map(crawler, id_lst)
+    pool.imap(crawler, id_lst)
     pool.close()
 except Exception as e:
     print e
@@ -120,3 +118,42 @@ conn_upd.close()
 conn_faq.close()
 conn_cmt.close()
 conn_time.close()
+
+# # def crawler(id):
+# #     pid = random(1,5)
+# #     crawler.the_queue.put('Doing: ' + str(pid))
+#
+# id_lst=range(10)
+# the_queue = Queue()
+# pool = Pool(cpu_count() * 2, worker,[the_queue])  # Creates a Pool with cpu_count * 2 threads.
+# pool.map(crawler, id_lst)
+# pool.close()
+
+# EXPERIMENT
+#
+# import os
+# import multiprocessing as mp
+# import time
+# from random import randint
+#
+# def crawler(x):
+#     print os.getpid(), ' working ', str(x)
+#     a=x*x*x
+#     t=randint(3,10)
+#     time.sleep(t)
+#     print str(x), ' slept ', str(t),'s'
+#     print os.getpid(), '-'+str(x)+' finished!'
+#     crawler.q.put('Ask to save ' + str(x))
+#     print the_queue.get()
+#
+# def f_init(q):
+#     print os.getpid(), ' working'
+#     crawler.q = q
+#
+# jobs = range(1,6)
+#
+# the_queue = mp.Queue()
+# p = mp.Pool(3, f_init, [the_queue])
+# p.imap(crawler, jobs)
+# p.close()
+
