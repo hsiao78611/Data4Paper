@@ -60,7 +60,7 @@ if not rec_df.empty:
 
 def crawler(id):
     pid = pids[id]
-
+    crawler.the_queue.put('Doing: ' + str(pid))
     # used to record processing time
     start_time = time.time()
 
@@ -97,16 +97,18 @@ def crawler(id):
 #     crawler(id)
 
 # crawling by multiprocessing
-def worker_main(queue):
-    print os.getpid(),"working"
-    while True:
-        item = queue.get(True)
-        print os.getpid(), "got", item
-        time.sleep(1) # simulate a "long" operation
+def worker(queue):
+    print os.getpid(),' working'
+    crawler.the_queue = queue
+    for i in range(len(id_lst)):
+        queue.get(True)
+        print os.getpid(), 'got!'
 
 try:
-    pool = Pool(cpu_count() * 2, worker_main,(Queue(),))  # Creates a Pool with cpu_count * 2 threads.
+    the_queue = Queue()
+    pool = Pool(cpu_count() * 2, worker,[the_queue])  # Creates a Pool with cpu_count * 2 threads.
     pool.map(crawler, id_lst)
+    pool.close()
 except Exception as e:
     print e
     traceback.print_exc()
