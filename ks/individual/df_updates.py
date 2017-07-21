@@ -47,10 +47,11 @@ def df_updates(upd_soup, pid):
             if 'timeline__divider--month' not in upd_sys_item[upd_sys].get('class'):
                 try:
                     upd_id = 'sys_' + str(upd_sys)
-                    upd_sys_date = upd_sys_item[upd].find('time').get('datetime')
-                    f3 = upd_sys_item[upd].find('div', class_='f3')
-                    f2 = upd_sys_item[upd].find('div', class_='f2')
-                    upd_sys_title = f3.text.encode("ascii", "ignore").strip() if f3 != None else f2.text.strip()
+                    upd_sys_date = upd_sys_item[upd_sys].find('time').get('datetime')
+                    f3 = upd_sys_item[upd_sys].find('div', class_='f3')
+                    f2 = upd_sys_item[upd_sys].find('div', class_='f2')
+                    upd_sys_title = f3.text.encode("ascii", "ignore").strip() if f3 != None \
+                        else (f2.text.strip() if f2 != None else upd_sys_item[upd_sys].find('b').text)
                 except Exception as e:
                     print 'update sys'+str(upd_sys)+' of project ' + pid + ' may have a problem.'
                     print e
