@@ -44,7 +44,8 @@ def df_updates(upd_soup, pid):
                 })
             df = df.append(upd_temp)
         for upd_sys in range(len(upd_sys_item)):
-            if any('month' not in elem for elem in upd_sys_item[upd_sys].get('class')):
+            if not any('month' in elem for elem in upd_sys_item[upd_sys].get('class')) \
+                    and upd_sys_item[upd_sys].find('div', class_='timeline__divider--month-range'):
                 try:
                     upd_id = 'sys_' + str(upd_sys)
                     upd_sys_date = upd_sys_item[upd_sys].find('time').get('datetime')
