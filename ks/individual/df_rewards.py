@@ -19,7 +19,6 @@ def df_rewards(rew_soup, pid):
         try:
             limit = rew_item[rew].find(class_ = 'pledge__limit')
             ship_info = rew_item[rew].find_all(class_ = 'pledge__detail-info')
-            print 'Yes here!'
             rew_id = rew
             rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_ = 'money').text))
             rew_backer_limit = limit.text.strip() if limit != None else None
@@ -44,6 +43,5 @@ def df_rewards(rew_soup, pid):
              'rew_ships_to': [rew_ships_to]
              })
         df = df.append(rew_temp)
-        print df
 
     return df

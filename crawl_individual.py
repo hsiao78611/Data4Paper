@@ -72,7 +72,6 @@ def crawler(id):
     proj_rew = proj.project_rewards()
     df_proj = proj_rew[0]
     df_rew = proj_rew[1]
-    print df_rew
     df_upd = proj.updates()
     df_faq = proj.faqs()
     # df_crt = proj.creators()

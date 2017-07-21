@@ -36,8 +36,7 @@ class Campaign:
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('main', attrs={'role': 'main'})
         proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-        strainer = SoupStrainer('div', class_='NS_projects__rewards_list js-project-rewards')
-        rew_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
+        rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
         response.close()
         return [df_project(proj_soup, self.pid), df_rewards(rew_soup, self.pid)]
 
