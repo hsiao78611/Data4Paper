@@ -15,6 +15,7 @@ from ks.utils.alnum import get_current_datetime
 # thread-based Pool
 from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
+from multiprocessing import Queue
 import traceback
 
 print get_current_datetime()
@@ -96,8 +97,15 @@ def crawler(id):
 #     crawler(id)
 
 # crawling by multiprocessing
+def worker_main(queue):
+    print os.getpid(),"working"
+    while True:
+        item = queue.get(True)
+        print os.getpid(), "got", item
+        time.sleep(1) # simulate a "long" operation
+
 try:
-    pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
+    pool = Pool(cpu_count() * 2, worker_main,(Queue(),))  # Creates a Pool with cpu_count * 2 threads.
     pool.map(crawler, id_lst)
 except Exception as e:
     print e
