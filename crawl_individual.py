@@ -4,25 +4,22 @@ import time
 from datetime import datetime
 import random
 from random import randint
-
 import pandas as pd
 
 import ks.individual.proj_crawler
 import ks.utils.renewip as new
 import ks.utils.record as rec
 import ks.utils.getlink
+from ks.utils.alnum import get_current_datetime
 
-from multiprocessing.dummy import Pool  # This is a thread-based Pool
+# thread-based Pool
+from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
 
-
-# the list is crawled by GoogleScraper and precessed by ProjectList.py
-# proj_lnks = ['https://www.kickstarter.com/projects/312002206/the-worlds-smallest-garden-0'
-#              ,'https://www.kickstarter.com/projects/hello/sense-know-more-sleep-better'
-#              ]
+print get_current_datetime()
 
 # create a directory
-directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+directory = os.getcwd() + '/' + 'RECORD'
 if not os.path.exists(directory):
     os.makedirs(directory)
 
@@ -94,14 +91,17 @@ def crawler(id):
 
 # crawling one by one
 
-while id_lst:
-    id = id_lst.pop()
-    crawler(id)
+# while id_lst:
+#     id = id_lst.pop()
+#     crawler(id)
 
 # crawling by multiprocessing
-
-# pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
-# pool.map(crawler, id_lst)
+try:
+    pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
+    pool.map(crawler, id_lst)
+except Exception as e:
+    print e
+    print get_current_datetime()
 
 conn_proj.close()
 conn_rew.close()
@@ -109,3 +109,5 @@ conn_upd.close()
 conn_faq.close()
 conn_cmt.close()
 conn_time.close()
+
+print get_current_datetime()

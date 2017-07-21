@@ -2,6 +2,13 @@ import pandas as pd
 import re
 
 def df_project(proj_soup, pid):
+
+    proj_title, proj_description, proj_url, proj_goal, \
+    proj_amount_pledged, proj_currency, proj_start_date, \
+    proj_end_date, proj_category, proj_subcategory, proj_backer_count, \
+    proj_comment_count, proj_update_count, proj_faq_count, proj_creator_id, \
+    proj_creator_name, proj_location = (None) * 17
+
     try:
         proj_title = proj_soup.find('a', class_ = 'hero__link').text
             # soup_proj.find('meta', attrs={'property': 'og:title'}).get('content')
@@ -21,7 +28,7 @@ def df_project(proj_soup, pid):
         proj_update_count = int(re.sub('[^\d]', '', proj_soup.find(class_='js-load-project-updates').text))
         find_faq = proj_soup.find(class_='js-load-project-faqs').findChildren()
         proj_faq_count = int(re.sub('[^\d]', '', find_faq[0].text)) if find_faq != [] else 0
-        proj_creator_id = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).get('href').split('/')[1]
+        proj_creator_id = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).get('href').split('/')[2]
             # proj_soup.find('meta', attrs={'property': 'kickstarter:creator'}).get('content').split('/')[-1]
         proj_creator_name = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).text.strip()
         proj_location = proj_soup.find(class_ = 'mr3', href=re.compile('/discover/places/')).text.strip()

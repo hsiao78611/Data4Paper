@@ -10,8 +10,7 @@ def df_comments(cmt_soup, pid):
          'cmt_profile_id': [],
          'cmt_collaborator': [],
          'cmt_superbaker': [],
-         'cmt_content': [],
-         'cmt_exe_time_sec': []
+         'cmt_content': []
          })
 
     if cmt_soup != None:

@@ -1,7 +1,7 @@
 import re
 import urllib2
 from random import randint
-
+import time
 from bs4 import BeautifulSoup, SoupStrainer
 
 import ks.utils.renewip as new
@@ -35,6 +35,7 @@ class Campaign:
         request = urllib2.Request(self.ks_link, None, self.headers)
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('main', attrs={'role': 'main'})
+        time.sleep(randint(1, 3))
         proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
         rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
         response.close()
@@ -44,6 +45,7 @@ class Campaign:
         request = urllib2.Request(self.ks_link + '/updates', None, self.headers)
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('div', class_='timeline')
+        time.sleep(randint(1, 3))
         upd_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
         response.close()
         return df_updates(upd_soup, self.pid)
@@ -52,6 +54,7 @@ class Campaign:
         request = urllib2.Request(self.ks_link + '/faqs', None, self.headers)
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('ul', class_='faqs col-8')
+        time.sleep(randint(1,3))
         faq_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
         response.close()
         return df_faqs(faq_soup, self.pid)
