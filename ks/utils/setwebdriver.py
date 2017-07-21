@@ -24,13 +24,13 @@ def set_driver(width, height):
 
     # setup webdriver
     # use Tor but it will be very slow...
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument('user-agent=' + _get_agent())
-    chrome_options.add_argument('--proxy-server=http://127.0.0.1:8118')
-    driver = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
+    # chrome_options = webdriver.ChromeOptions()
+    # chrome_options.add_argument('user-agent=' + _get_agent())
+    # chrome_options.add_argument('--proxy-server=http://127.0.0.1:8118')
+    # driver = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
 
     # do not use Tor
-    # driver = webdriver.Chrome()
+    driver = webdriver.Chrome()
 
     # set the browser size in order to click the button
     driver.set_window_size(width, height)

@@ -69,20 +69,20 @@ class Campaign:
 
     def comments(self):
         # set a web driver with the size
-        driver = sw.set_driver(910, 1820)
+        driver = sw.set_driver(900, 1100)
         # get the web page
         driver.get(self.ks_link + '/comments')
-
-        if driver.find_element_by_xpath('//*[@id="content-wrap"]/div[2]/div/div/div/div[2]/a[5]/span/data').text == '0':
+        # get total comment number
+        self.total_cmt = int(re.sub('[^\d]', '', driver.find_element_by_xpath(
+            '//*[@id="content-wrap"]/div[2]/div/div/div/div[2]/a[5]/span/data').text))
+        if self.total_cmt == '0':
             self.total_cmt = 0
             self.count_visible_cmt = 0
             cmt_soup = None
         else:
-            # get total comment number
-            self.total_cmt = int(re.sub('[^\d]', '', driver.find_element_by_xpath('//*[@id="content-wrap"]/div[2]/div/div/div/div[2]/a[5]/span/data').text))
             # scroll down repeatedly until it cannot load more data
             # and get finally amount of visible items
-            self.count_visible_cmt = sc.scroll_down_explore(driver, self.total)
+            self.count_visible_cmt = sc.scroll_down_comment(driver, self.self.total_cmt)
 
             strainer = SoupStrainer('ol', class_='comments')
             cmt_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)

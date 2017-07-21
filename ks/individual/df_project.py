@@ -19,14 +19,14 @@ def df_project(proj_soup, pid):
         proj_backer_count = int(re.sub('[^\d]', '', proj_soup.find_all('h3', class_='mb0')[1].text))
         proj_comment_count = int(re.sub('[^\d]', '', proj_soup.find(class_='js-load-project-comments').text))
         proj_update_count = int(re.sub('[^\d]', '', proj_soup.find(class_='js-load-project-updates').text))
-        find_faq = proj_soup.find(class_='js-load-project-faqs').findChildren()[0]
-        proj_faq_count = int(re.sub('[^\d]', '', find_faq.text)) if find_faq != None else 0
+        find_faq = proj_soup.find(class_='js-load-project-faqs').findChildren()
+        proj_faq_count = int(re.sub('[^\d]', '', find_faq[0].text)) if find_faq != [] else 0
         proj_creator_id = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).get('href').split('/')[1]
             # proj_soup.find('meta', attrs={'property': 'kickstarter:creator'}).get('content').split('/')[-1]
         proj_creator_name = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).text.strip()
         proj_location = proj_soup.find(class_ = 'mr3', href=re.compile('/discover/places/')).text.strip()
     except Exception as e:
-        print 'project: ' + pid + 'may have a problem.'
+        print 'project: ' + pid + ' may have a problem.'
         print e
 
     df = pd.DataFrame(
