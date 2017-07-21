@@ -5,7 +5,7 @@ def df_rewards(rew_soup, pid):
     rew_item = rew_soup.find_all(class_ = 'hover-group')
 
     df = pd.DataFrame(
-        {'id': [],
+        {'pid': [],
          'rew_id': [],
          'rew_amount_required': [],
          'rew_backer_limit': [],
