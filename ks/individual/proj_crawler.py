@@ -36,15 +36,9 @@ class Campaign:
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('main', attrs={'role': 'main'})
         proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-        print 'finished project soup'
-
-        # self.rew = soup_proj.find_all(class_ = 'hover-group')
         strainer = SoupStrainer('div', class_='NS_projects__rewards_list js-project-rewards')
         rew_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-        print 'finished rewards soup'
-
-        # self.crt_id = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).get('href').split('/')[1]
-
+        response.close()
         return [df_project(proj_soup, self.pid), df_rewards(rew_soup, self.pid)]
 
     def updates(self):
@@ -52,9 +46,7 @@ class Campaign:
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('div', class_='timeline')
         upd_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-
-        print 'finished updates soup'
-
+        response.close()
         return df_updates(upd_soup, self.pid)
 
     def faqs(self):
@@ -62,9 +54,7 @@ class Campaign:
         response = urllib2.urlopen(request)
         strainer = SoupStrainer('ul', class_='faqs col-8')
         faq_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-
-        print 'finished faqs soup'
-
+        response.close()
         return df_faqs(faq_soup, self.pid)
 
     def comments(self):

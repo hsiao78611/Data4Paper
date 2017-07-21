@@ -69,8 +69,9 @@ def crawler(id):
     print 'loading ' + pid + ': ' + proj_lnks[id]
 
     # dataframe
-    df_proj = proj.project_rewards()[0]
-    df_rew = proj.project_rewards()[1]
+    proj_rew = proj.project_rewards()
+    df_proj = proj_rew[0]
+    df_rew = proj_rew[1]
     df_upd = proj.updates()
     df_faq = proj.faqs()
     # df_crt = proj.creators()
@@ -80,7 +81,7 @@ def crawler(id):
     df_time = pd.DataFrame({'pid': [pid], 'exe_time': [exe_time]})
 
     # record what already be loaded
-    record.save_record(id_lst[id], id, proj.total_cmt, proj.count_visible_cmt)
+    record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
 
     # save to 'sqlite'
     df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
@@ -92,16 +93,13 @@ def crawler(id):
 
 
 # crawling one by one
-count_num = 0
+
 while id_lst:
     id = id_lst.pop()
     crawler(id)
-    # renew a connection
-    count_num = count_num + 1
-    if count_num % 1000 == 0:
-        new.renew_connection()
 
 # crawling by multiprocessing
+
 # pool = Pool(cpu_count() * 2)  # Creates a Pool with cpu_count * 2 threads.
 # pool.map(crawler, id_lst)
 

@@ -43,7 +43,6 @@ def df_rewards(rew_soup, pid):
              'rew_delivery': [rew_delivery],
              'rew_ships_to': [rew_ships_to]
              })
-
         df = df.append(rew_temp)
 
     return df

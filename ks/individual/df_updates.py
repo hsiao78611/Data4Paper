@@ -3,6 +3,7 @@ import re
 
 def df_updates(upd_soup, pid):
     upd_item = upd_soup.find_all(class_='timeline__item')
+    upd_sys_item = upd_soup.find_all(class_='timeline__divider')
 
     df = pd.DataFrame(
         {'pid': [],
@@ -42,5 +43,28 @@ def df_updates(upd_soup, pid):
                  'upd_backer_only' : [upd_backer_only]
                 })
             df = df.append(upd_temp)
+        for upd_sys in range(len(upd_sys_item)):
+            if 'timeline__divider--month' not in upd_sys_item[upd_sys].get('class'):
+                try:
+                    upd_id = 'sys_' + str(upd_sys)
+                    upd_sys_date = upd_sys_item[upd].find('time').get('datetime')
+                    f3 = upd_sys_item[upd].find('div', class_='f3')
+                    f2 = upd_sys_item[upd].find('div', class_='f2')
+                    upd_sys_title = f3.text.encode("ascii", "ignore").strip() if f3 != None else f2.text.strip()
+                except Exception as e:
+                    print 'update sys'+str(upd_sys)+' of project ' + pid + ' may have a problem.'
+                    print e
+                    break
+
+                upd_sys_temp = pd.DataFrame(
+                    {'pid': [pid],
+                     'upd_id': [upd_id],
+                     'upd_date': [upd_sys_date],
+                     'upd_title': [upd_sys_title],
+                     'upd__comment_count': [None],
+                     'upd__like_count': [None],
+                     'upd_backer_only': [None]
+                     })
+                df = df.append(upd_sys_temp)
 
     return df
