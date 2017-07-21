@@ -44,7 +44,7 @@ def df_updates(upd_soup, pid):
                 })
             df = df.append(upd_temp)
         for upd_sys in range(len(upd_sys_item)):
-            if upd_sys_item[upd_sys].find('div', class_='timeline__divider--month-range') == None:
+            if any('month' not in elem for elem in upd_sys_item[upd_sys].get('class')):
                 try:
                     upd_id = 'sys_' + str(upd_sys)
                     upd_sys_date = upd_sys_item[upd_sys].find('time').get('datetime')
@@ -53,7 +53,7 @@ def df_updates(upd_soup, pid):
                     upd_sys_title = f3.text.encode("ascii", "ignore").strip() if f3 != None \
                         else (f2.text.strip() if f2 != None else upd_sys_item[upd_sys].find('b').text)
                 except Exception as e:
-                    print 'update sys'+str(upd_sys)+' of project ' + pid + ' may have a problem.'
+                    print 'update sys '+str(upd_sys)+' of project ' + pid + ' may have a problem.'
                     print e
                     break
 
