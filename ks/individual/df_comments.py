@@ -18,6 +18,7 @@ def df_comments(cmt_soup, pid):
         rh = lambda html: html.get_text()
 
         for cmt in range(len(cmt_item)):
+
             try:
                 cmt_id = cmt_item[cmt].get('id') if cmt_item[cmt].get('id') != None else 'comment-earliest'
                 cmt_datetime = cmt_item[cmt].find('data').get('data-value')

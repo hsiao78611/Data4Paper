@@ -49,7 +49,7 @@ def _scrape_and_save_user_agents():
 
 
 def _user_agents_are_old(user_agents):
-    scrape_date = datetime.strptime(user_agents.get('date'), DATE_FORMAT)
+    scrape_date = datetime.strftime(user_agents.get('date'), DATE_FORMAT)
     today = datetime.now()
 
     delta = today - scrape_date

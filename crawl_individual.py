@@ -15,6 +15,7 @@ from ks.utils.alnum import get_current_datetime
 # thread-based Pool
 from multiprocessing.dummy import Pool
 from multiprocessing import cpu_count
+import traceback
 
 print get_current_datetime()
 
@@ -77,9 +78,6 @@ def crawler(id):
     print exe_time
     df_time = pd.DataFrame({'pid': [pid], 'exe_time': [exe_time]})
 
-    # record what already be loaded
-    record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
-
     # save to 'sqlite'
     df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
     df_rew.to_sql(name = 'rewards', con = conn_rew, if_exists = 'append', index = False)
@@ -88,6 +86,8 @@ def crawler(id):
     df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
     df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
 
+    # record what already be loaded
+    record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
 
 # crawling one by one
 
@@ -101,6 +101,7 @@ try:
     pool.map(crawler, id_lst)
 except Exception as e:
     print e
+    traceback.print_exc()
     print get_current_datetime()
 
 conn_proj.close()
@@ -109,5 +110,3 @@ conn_upd.close()
 conn_faq.close()
 conn_cmt.close()
 conn_time.close()
-
-print get_current_datetime()
