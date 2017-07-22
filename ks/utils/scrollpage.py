@@ -32,6 +32,8 @@ def scroll_down_comment(driver, total):
     #     wait = WebDriverWait(driver, wait_time)
     #     wait.until(EC.presence_of_element_located((By.XPATH, input_Xpath)))
 
+    button_visiable = driver.find_element_by_xpath(load_more_button_Xpath).get_attribute('style')
+
     def _earliest_comment():
         try:
             driver.find_element_by_xpath(earliest_comment_Xpath)
@@ -39,7 +41,7 @@ def scroll_down_comment(driver, total):
         except Exception:
             return False
 
-    while (_earliest_comment() == False or total == temp_count_visible_item):
+    while (_earliest_comment() == False or button_visiable == 'display: none;'):
         button_location = 'document.body.scrollHeight'  # to the bottom
         # scroll down and click
         _scroll_down(driver, load_more_button_Xpath, button_location)
