@@ -35,7 +35,6 @@ def set_driver(width, height):
     # set the browser size in order to click the button
     driver.set_window_size(width, height)
 
-
     # # used to check the user agent and ip address
     # driver.get('http://ipinfo.io/ip/')
     # print driver.execute_script('return navigator.userAgent')

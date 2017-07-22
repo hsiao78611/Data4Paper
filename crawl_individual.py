@@ -99,16 +99,15 @@ def crawler(id):
 
 # crawling by multiprocessing
 def worker(queue):
-    print str(os.getpid())+' working'
     crawler.que = queue
 
 try:
     the_queue = Queue()
-    pool = Pool(cpu_count() * 2, worker,[the_queue])  # Creates a Pool with cpu_count * 2 threads.
+    pool = Pool(cpu_count(), worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
     pool.imap(crawler, id_lst)
     pool.close()
-    for i in range(id_lst):
-        the_queue.get()
+    while True:
+        the_queue.get(True)
 
 except Exception as e:
     print e
@@ -122,52 +121,4 @@ conn_faq.close()
 conn_cmt.close()
 conn_time.close()
 
-
-# EXPERIMENT
-#
-# import os
-# import multiprocessing as mp
-# import time
-# from random import randint
-#
-# def crawler(x):
-#     print os.getpid(), ' working ', str(x)
-#     t=randint(3,10)
-#     time.sleep(t)
-#     print str(x), ' slept ', str(t),'s'
-#     print os.getpid(), '-'+str(x)+' finished!'
-#     crawler.q.put('Ask to save ' + str(x))
-#     print the_queue.get()
-#
-# def f_init(q):
-#     print os.getpid(), ' working'
-#     crawler.q = q
-#
-# jobs = range(1,6)
-#
-# the_queue = mp.Queue()
-# p = mp.Pool(3, f_init, [the_queue])
-# p.imap(crawler, jobs)
-# p.close()
-#
-#
-# def f(x):
-#     t=randint(3,10)
-#     time.sleep(t)
-#     print str(os.getpid())+': '+str(x)+ ' finished! in '+ str(t)+ 's'
-#     def _p():
-#         print str(os.getpid())+': '+str(x)+' Saving'
-#     f.q.put(_p())
-#
-# def f_init(q):
-#     print str(os.getpid())+' working'
-#     f.q = q
-#
-# jobs = range(10)
-# q0 = mp.Queue()
-# p = mp.Pool(cpu_count() * 2, f_init, [q0])
-# p.imap(f, jobs)
-# p.close()
-#
-# for i in jobs:
-#     q0.get()
+# Queue, refered from: https://stackoverflow.com/questions/3827065/can-i-use-a-multiprocessing-queue-in-a-function-called-by-pool-imap

@@ -12,9 +12,10 @@ def _scroll_down(driver, load_more_button_Xpath, button_location):
     # click only there exists a button
     if button_visiable != 'display: none;':
         try:
+            time.sleep(1)
             load_more_button.click()
         except Exception as e:
-            # driver.save_screenshot('screenshot.png') # for debugging
+            driver.refresh()
             print e
 
     # wait for loading more projects
@@ -38,9 +39,9 @@ def scroll_down_comment(driver, total):
         except Exception:
             return False
 
-    while _earliest_comment() == False:
+    while (_earliest_comment() == False or total == temp_count_visible_item):
         button_location = 'document.body.scrollHeight'  # to the bottom
-        # scroll down
+        # scroll down and click
         _scroll_down(driver, load_more_button_Xpath, button_location)
         count_visible_item = len(driver.find_elements_by_xpath(
             '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
@@ -66,7 +67,7 @@ def scroll_down_explore(driver, total):
         count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
         button_location = str(500 * (count_visible_item  / 3))
         # scroll down
-        button_visiable = _scroll_down(driver, load_more_button_Xpath, button_location)
+        _scroll_down(driver, load_more_button_Xpath, button_location)
 
         # track the state
         count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
