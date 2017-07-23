@@ -19,13 +19,13 @@ def _scroll_down(driver, load_more_button_Xpath, button_location):
             print e
 
     # wait for loading more projects
-    time.sleep(randint(1, 5))
+    time.sleep(randint(1, 3))
     return button_visiable
 
 
 def scroll_down_comment(driver, total):
     load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
-    earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li[@class=\"NS_comments__comment comment earliest_comment item mb3 py3\"]'
+    earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
     temp_count_visible_item = 0
 
     # def _wait_for_load(input_Xpath, wait_time):
@@ -35,13 +35,10 @@ def scroll_down_comment(driver, total):
     button_visiable = driver.find_element_by_xpath(load_more_button_Xpath).get_attribute('style')
 
     def _earliest_comment():
-        try:
-            driver.find_element_by_xpath(earliest_comment_Xpath)
-            return True
-        except Exception:
-            return False
+        earliest = driver.find_elements_by_xpath(earliest_comment_Xpath)[-1].get_attribute('class')
+        return 'earliest_comment' in earliest
 
-    while (_earliest_comment() == False or button_visiable == 'display: none;'):
+    while _earliest_comment() == False:
         button_location = 'document.body.scrollHeight'  # to the bottom
         # scroll down and click
         _scroll_down(driver, load_more_button_Xpath, button_location)
