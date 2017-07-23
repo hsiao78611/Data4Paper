@@ -103,7 +103,7 @@ def worker(queue):
 
 try:
     the_queue = Queue()
-    pool = Pool(cpu_count(), worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
+    pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
     pool.imap(crawler, id_lst)
     pool.close()
     while True:

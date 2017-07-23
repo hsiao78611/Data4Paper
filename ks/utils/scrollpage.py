@@ -42,17 +42,22 @@ def scroll_down_comment(driver, total):
         button_location = 'document.body.scrollHeight'  # to the bottom
         # scroll down and click
         _scroll_down(driver, load_more_button_Xpath, button_location)
-        count_visible_item = len(driver.find_elements_by_xpath(
-            '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
+
         # track the state
-        if count_visible_item != temp_count_visible_item:
-            print str(total) + '-' + str(count_visible_item)
-            temp_count_visible_item = count_visible_item
+        # count_visible_item = len(driver.find_elements_by_xpath(
+        #     '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
+        # if count_visible_item != temp_count_visible_item:
+        #     print str(total) + '-' + str(count_visible_item)
+        #     temp_count_visible_item = count_visible_item
+        
+    count_visible_item = len(driver.find_elements_by_xpath(
+        '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
+    print str(total) + '-' + str(count_visible_item)
 
     # wait for results to appear
     # _wait_for_load(earliest_comment_Xpath, 5)
 
-    return temp_count_visible_item
+    return count_visible_item
 
 
 def scroll_down_explore(driver, total):
