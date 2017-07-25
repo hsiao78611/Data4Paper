@@ -49,7 +49,7 @@ def scroll_down_comment(driver, total):
         # if count_visible_item != temp_count_visible_item:
         #     print str(total) + '-' + str(count_visible_item)
         #     temp_count_visible_item = count_visible_item
-        
+
     count_visible_item = len(driver.find_elements_by_xpath(
         '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
     print str(total) + '-' + str(count_visible_item)
