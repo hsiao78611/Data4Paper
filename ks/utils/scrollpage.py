@@ -1,20 +1,22 @@
 import time
 from random import randint
 
-def _scroll_down(driver, load_more_button_Xpath, button_location):
-    scroll_range = button_location
-    # scroll to the position
-    driver.execute_script('window.scrollTo(0,' + scroll_range + ');')
+def _scroll_down(driver, load_more_button_Xpath):
+
     # find the button
     load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
-    button_visiable = load_more_button.get_attribute('style')  # .is_displayed() may occur error
+    # scroll to the position
+    load_more_button.location_once_scrolled_into_view
 
     # click only there exists a button
+    button_visiable = load_more_button.get_attribute('style')  # .is_displayed() may occur error
     if button_visiable != 'display: none;':
         try:
             time.sleep(1)
             load_more_button.click()
         except Exception as e:
+            driver.execute_script('window.scrollTo(0,0);') # 'document.body.scrollHeight'  # to the bottom
+            time.sleep(10)
             driver.refresh()
             print e
 
@@ -26,29 +28,18 @@ def _scroll_down(driver, load_more_button_Xpath, button_location):
 def scroll_down_comment(driver, total):
     load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
     earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
-    temp_count_visible_item = 0
 
     # def _wait_for_load(input_Xpath, wait_time):
     #     wait = WebDriverWait(driver, wait_time)
     #     wait.until(EC.presence_of_element_located((By.XPATH, input_Xpath)))
-
-    button_visiable = driver.find_element_by_xpath(load_more_button_Xpath).get_attribute('style')
 
     def _earliest_comment():
         earliest = driver.find_elements_by_xpath(earliest_comment_Xpath)[-1].get_attribute('class')
         return 'earliest_comment' in earliest
 
     while _earliest_comment() == False:
-        button_location = 'document.body.scrollHeight'  # to the bottom
         # scroll down and click
-        _scroll_down(driver, load_more_button_Xpath, button_location)
-
-        # track the state
-        # count_visible_item = len(driver.find_elements_by_xpath(
-        #     '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
-        # if count_visible_item != temp_count_visible_item:
-        #     print str(total) + '-' + str(count_visible_item)
-        #     temp_count_visible_item = count_visible_item
+        _scroll_down(driver, load_more_button_Xpath)
 
     count_visible_item = len(driver.find_elements_by_xpath(
         '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
@@ -62,16 +53,11 @@ def scroll_down_comment(driver, total):
 
 def scroll_down_explore(driver, total):
     load_more_button_Xpath = '//*[@id="projects"]/div/div[2]'
-    button_visiable = ''
     temp_count_visible_item = 0
 
-    # while button_visiable != 'display: none;':
     while temp_count_visible_item != total:
-        # control scrolling range by the amount of items
-        count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))
-        button_location = str(500 * (count_visible_item  / 3))
         # scroll down
-        _scroll_down(driver, load_more_button_Xpath, button_location)
+        _scroll_down(driver, load_more_button_Xpath)
 
         # track the state
         count_visible_item = len(driver.find_elements_by_xpath('//*[@data-project_state="successful"]'))

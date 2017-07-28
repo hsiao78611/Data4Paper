@@ -61,7 +61,7 @@ class Campaign:
 
     def comments(self):
         # set a web driver with the size
-        driver = sw.set_driver(900, 1100)
+        driver = sw.set_driver(800, 880)
         # get the web page
         driver.get(self.ks_link + '/comments')
         # get total comment number
