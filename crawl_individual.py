@@ -96,26 +96,26 @@ def crawler(id):
     _save_df()
 
 # crawling one by one
-# while id_lst:
-#     id = id_lst.pop()
-#     crawler(id)
+while id_lst:
+    id = id_lst.pop()
+    crawler(id)
 
 # crawling by multiprocessing
-def worker(queue):
-    crawler.que = queue
-
-try:
-    the_queue = Queue()
-    pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-    pool.imap(crawler, id_lst)
-    pool.close()
-    while True:
-        the_queue.get(True)
-
-except Exception as e:
-    print e
-    traceback.print_exc()
-    print get_current_datetime()
+# def worker(queue):
+#     crawler.que = queue
+#
+# try:
+#     the_queue = Queue()
+#     pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
+#     pool.imap(crawler, id_lst)
+#     pool.close()
+#     while True:
+#         the_queue.get(True)
+#
+# except Exception as e:
+#     print e
+#     traceback.print_exc()
+#     print get_current_datetime()
 
 conn_proj.close()
 conn_rew.close()
