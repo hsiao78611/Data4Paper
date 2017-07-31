@@ -30,7 +30,8 @@ def set_driver(width, height):
     # driver = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
 
     # do not use Tor
-    driver = webdriver.Chrome()
+    # driver = webdriver.Chrome()
+    driver = webdriver.PhantomJS()
 
     # set the browser size in order to click the button
     driver.set_window_size(width, height)

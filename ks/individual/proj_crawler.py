@@ -67,6 +67,7 @@ class Campaign:
         # get total comment number
         self.total_cmt = int(re.sub('[^\d]', '', driver.find_element_by_xpath(
             '//*[@id="content-wrap"]/div[2]/div/div/div/div[2]/a[5]/span/data').text))
+        print 'total comments: ' + str(self.total_cmt)
         if self.total_cmt == 0:
             self.total_cmt = 0
             self.count_visible_cmt = 0

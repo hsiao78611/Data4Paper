@@ -90,7 +90,10 @@ def crawler(id):
         record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
 
     # put it in a queue then get a permission
-    crawler.que.put(_save_df())
+    # crawler.que.put(_save_df())
+
+    # crawling one by one
+    _save_df()
 
 # crawling one by one
 # while id_lst:

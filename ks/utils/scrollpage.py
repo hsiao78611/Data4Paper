@@ -28,6 +28,8 @@ def _scroll_down(driver, load_more_button_Xpath):
 def scroll_down_comment(driver, total):
     load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
     earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
+    req_count = total/50 + 1 if total%50 > 0 else 0
+    count = 0
 
     # def _wait_for_load(input_Xpath, wait_time):
     #     wait = WebDriverWait(driver, wait_time)
@@ -38,6 +40,8 @@ def scroll_down_comment(driver, total):
         return 'earliest_comment' in earliest
 
     while _earliest_comment() == False:
+        count = count + 1
+        print count, '/', req_count
         # scroll down and click
         _scroll_down(driver, load_more_button_Xpath)
 
