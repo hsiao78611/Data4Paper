@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from random import randint
 
 def _scroll_down(driver, load_more_button_Xpath):
@@ -29,7 +30,8 @@ def scroll_down_comment(driver, total):
     load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
     earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
     req_count = total/50 + 1 if total%50 > 0 else 0
-    count = 0
+    count = 1
+    t1 = datetime.now()
 
     # def _wait_for_load(input_Xpath, wait_time):
     #     wait = WebDriverWait(driver, wait_time)
@@ -39,11 +41,14 @@ def scroll_down_comment(driver, total):
         earliest = driver.find_elements_by_xpath(earliest_comment_Xpath)[-1].get_attribute('class')
         return 'earliest_comment' in earliest
 
+    print count, '/', req_count
     while _earliest_comment() == False:
-        count = count + 1
-        print count, '/', req_count
         # scroll down and click
         _scroll_down(driver, load_more_button_Xpath)
+        t2 = datetime.now()
+        t3 = t2 - t1
+        count = count + 1
+        print count, '/', req_count, t3.total_seconds()
 
     count_visible_item = len(driver.find_elements_by_xpath(
         '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
