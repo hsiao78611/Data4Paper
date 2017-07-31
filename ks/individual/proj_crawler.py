@@ -3,6 +3,7 @@ import urllib2
 from random import randint
 import time
 from bs4 import BeautifulSoup, SoupStrainer
+import signal
 
 import ks.utils.renewip as new
 import ks.utils.scrollpage as sc
@@ -82,6 +83,9 @@ class Campaign:
 
             strainer = SoupStrainer('ol', class_='comments')
             cmt_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
+
+        # only for PhantomJS
+        driver.service.process.send_signal(signal.SIGTERM)
 
         driver.quit()
         print 'finished comments soup'

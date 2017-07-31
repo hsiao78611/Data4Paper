@@ -48,7 +48,7 @@ def scroll_down_comment(driver, total):
         t2 = datetime.now()
         t3 = t2 - t1
         count = count + 1
-        print count, '/', req_count, t3.total_seconds()
+        print count, '/', req_count,' #', t3.total_seconds(),'seconds elapsed'
 
     count_visible_item = len(driver.find_elements_by_xpath(
         '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'))
