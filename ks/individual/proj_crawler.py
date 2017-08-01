@@ -66,7 +66,7 @@ class Campaign:
         # get the web page
         driver.get(self.ks_link + '/comments')
         # get total comment number
-        try: # there may have a live stream video
+        try: # there may have a live stream video, such as 'Tuesday total body boss workout!'
             self.total_cmt = int(re.sub('[^\d]', '', driver.find_element_by_xpath(
                 '//*[@id="content-wrap"]/div[2]/div/div/div/div[2]/a[5]/span/data').text))
         except Exception as e:

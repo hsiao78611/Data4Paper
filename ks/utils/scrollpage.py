@@ -5,7 +5,11 @@ from random import randint
 def _scroll_down(driver, load_more_button_Xpath):
 
     # find the button
-    load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
+    try:
+        load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
+    except Exception as e:  # there may have a subscribe feature, such as 'Tuesday total body boss workout!'
+        print e
+        load_more_button = driver.find_element_by_xpath('//*[@id=\"content-wrap\"]/div[3]/section[7]/div/div/div/div[2]/div[2]/a')
     # scroll to the position
     load_more_button.location_once_scrolled_into_view
 
