@@ -89,18 +89,19 @@ def crawler(id):
         # record what already be loaded
         record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
 
-    # put it in a queue then get a permission
+    ## crawling via multiprocessing and queue
+    ## put it in a queue then get a permission
     # crawler.que.put(_save_df())
 
-    # crawling one by one
+    ## crawling one by one
     _save_df()
 
-# crawling one by one
+## crawling one by one
 while id_lst:
     id = id_lst.pop()
     crawler(id)
 
-# crawling by multiprocessing
+## crawling via multiprocessing and queue
 # def worker(queue):
 #     crawler.que = queue
 #
@@ -111,7 +112,6 @@ while id_lst:
 #     pool.close()
 #     while True:
 #         the_queue.get(True)
-#
 # except Exception as e:
 #     print e
 #     traceback.print_exc()

@@ -16,10 +16,12 @@ def _scroll_down(driver, load_more_button_Xpath):
             time.sleep(1)
             load_more_button.click()
         except Exception as e:
-            driver.execute_script('window.scrollTo(0,0);') # 'document.body.scrollHeight'  # to the bottom
-            time.sleep(10)
-            driver.refresh()
+            # driver.refresh() # it will redo all of clicks again...
             print e
+            time.sleep(10)
+            load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
+            load_more_button.location_once_scrolled_into_view
+            load_more_button.click()
 
     # wait for loading more projects
     time.sleep(randint(1, 3))
@@ -27,7 +29,7 @@ def _scroll_down(driver, load_more_button_Xpath):
 
 
 def scroll_down_comment(driver, total):
-    if driver.find_elements_by_xpath('/html/body/div[2]').get_attribute('class') != 'countdown-section':
+    if driver.find_element_by_xpath('/html/body/div[2]').get_attribute('class') != 'countdown-section':
         load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
         earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
     else: # there may have a special feature on 'div[2]', such as project 'BodyBoss'
