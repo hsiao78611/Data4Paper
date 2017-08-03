@@ -16,12 +16,8 @@ def _scroll_down(driver, load_more_button_Xpath):
             time.sleep(1)
             load_more_button.click()
         except Exception as e:
-            # driver.refresh() # it will redo all of clicks again...
             print e
-            time.sleep(10)
-            load_more_button = driver.find_element_by_xpath(load_more_button_Xpath)
-            load_more_button.location_once_scrolled_into_view
-            load_more_button.click()
+            time.sleep(5)
 
     # wait for loading more projects
     time.sleep(randint(1, 3))
