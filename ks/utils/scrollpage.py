@@ -25,12 +25,15 @@ def _scroll_down(driver, load_more_button_Xpath):
 
 
 def scroll_down_comment(driver, total):
-    if driver.find_element_by_xpath('/html/body/div[2]').get_attribute('class') != 'countdown-section':
-        load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
-        earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
-    else: # there may have a special feature on 'div[2]', such as project 'BodyBoss'
+    load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[2]/section[7]/div/div/div/div[2]/div[2]/a'
+    earliest_comment_Xpath = '//*[@id="content-wrap"]/div[2]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
+    try:
+        driver.find_element_by_xpath(load_more_button_Xpath)
+    except Exception as e:
+         # there may have a special feature on 'div[2]', such as project 'BodyBoss'
         load_more_button_Xpath = '//*[@id=\"content-wrap\"]/div[3]/section[7]/div/div/div/div[2]/div[2]/a'
         earliest_comment_Xpath = '//*[@id="content-wrap"]/div[3]/section[7]/div/div/div/div[2]/div[2]/ol/li/ol/li'
+
     req_count = total/50 + 1 if total%50 > 0 else 0
     count = 1
     start_time = datetime.now()
