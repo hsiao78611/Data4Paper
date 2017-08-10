@@ -89,8 +89,9 @@ class Campaign:
             strainer = SoupStrainer('ol', class_='comments')
             cmt_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
 
-        # only for PhantomJS
-        driver.service.process.send_signal(signal.SIGTERM)
+        # # only for PhantomJS (maybe not necessary)
+        # # kill the specific PhantomJS child processing
+        # driver.service.process.send_signal(signal.SIGTERM)
 
         driver.quit()
         print 'finished comments soup'
