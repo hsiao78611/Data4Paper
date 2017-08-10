@@ -54,7 +54,7 @@ http://www.nltk.org/nltk_data/
 * Libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning
 * Wrappers for industrial-strength NLP libraries
 
-![resources.png](attachment:resources.png)
+<img style="width: 600px;" src="https://github.com/hsiao78611/Data4Paper/blob/master/notebooks/pic/resources.png">
 
 ## Explanation of Common NLP Terms
 
@@ -77,7 +77,7 @@ For examples,
     pip3 install nltk
     nltk.download()
     
-<img style="width: 600px;" src="attachment:nltk_download.png">
+<img style="width: 600px;" src="https://github.com/hsiao78611/Data4Paper/blob/master/notebooks/pic/nltk_download.png">
 
 ## 3. Accessing Text Corpora and Lexical Resources
 
