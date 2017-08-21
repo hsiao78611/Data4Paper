@@ -25,13 +25,6 @@
 * Free, Open-source
 
 
-# Wiki
-The Natural Language Toolkit, or more commonly NLTK, is a suite of libraries and programs for symbolic and statistical natural language processing (NLP) for English written in the Python programming language. It was developed by Steven Bird and Edward Loper in the Department of Computer and Information Science at the University of Pennsylvania.[5] NLTK includes graphical demonstrations and sample data. It is accompanied by a book that explains the underlying concepts behind the language processing tasks supported by the toolkit,[6] plus a cookbook.[7]
-
-NLTK is intended to support research and teaching in NLP or closely related areas, including empirical linguistics, cognitive science, artificial intelligence, information retrieval, and machine learning.[8] NLTK has been used successfully as a teaching tool, as an individual study tool, and as a platform for prototyping and building research systems. There are 32 universities in the US and 25 countries using NLTK in their courses. NLTK supports classification, tokenization, stemming, tagging, parsing, and semantic reasoning functionalities.[9]
-
-
-
 ## Goals of NLTK
 
 
@@ -54,7 +47,7 @@ http://www.nltk.org/nltk_data/
 * Libraries for classification, tokenization, stemming, tagging, parsing, and semantic reasoning
 * Wrappers for industrial-strength NLP libraries
 
-![resources.png](attachment:resources.png)
+<img style="width: 600px;" src="https://github.com/hsiao78611/Data4Paper/blob/master/notebooks/pic/resources.png">
 
 ## Explanation of Common NLP Terms
 
@@ -77,7 +70,7 @@ For examples,
     pip3 install nltk
     nltk.download()
     
-<img style="width: 600px;" src="attachment:nltk_download.png">
+<img style="width: 600px;" src="https://github.com/hsiao78611/Data4Paper/blob/master/notebooks/pic/nltk_download.png">
 
 ## 3. Accessing Text Corpora and Lexical Resources
 
