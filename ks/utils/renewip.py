@@ -8,6 +8,8 @@ import time
 from stem import Signal
 from stem.control import Controller
 
+requestIP = "http://icanhazip.com/" # ipinfo.io/ip/"
+
 def _request(url):
     # communicate with TOR via a local proxy (privoxy)
     def _set_urlproxy():
@@ -22,7 +24,7 @@ def _request(url):
     return urllib2.urlopen(request).read()
 
 def renew_connection():
-    oldIP = _request("http://ipinfo.io/ip/") # icanhazip.com/")
+    oldIP = _request(requestIP)
     # seconds between
     # IP address checks
     secondsBetweenChecks = 2
@@ -32,7 +34,7 @@ def renew_connection():
         controller.authenticate(password='my_password')
         controller.signal(Signal.NEWNYM)
         controller.close()
-    newIP = _request("http://ipinfo.io/ip/") # icanhazip.com/")
+    newIP = _request(requestIP)
 
     # elapsed seconds
     seconds = 0
@@ -46,6 +48,6 @@ def renew_connection():
         # track the elapsed seconds
         seconds += secondsBetweenChecks
         # obtain the current IP address
-        newIP = _request("http://ipinfo.io/ip/") # icanhazip.com/")
+        newIP = _request(requestIP)
         # signal that the program is still awaiting a different IP address
         print ("%d seconds elapsed awaiting a different IP address." % seconds)
