@@ -23,10 +23,10 @@ def df_created(crt_soup, cid):
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]
-                category = re.sub(r'^https://www.kickstarter.com/discover/categories/', '',
-                                  plist[i].find_all('a')[1].get('href')).split('?')[0]
+                category = re.sub(r'^http://www.kickstarter.com/discover/categories/', '',
+                                  plist[i].find('a', class_='navy-600').get('href')).split('?')[0]
 
-                title = re.sub('[:$]', '', plist[i].find_all('a')[2].text)
+                title = re.sub('[:$]', '', plist[i].find('a', class_='navy-700').text)
                 project_state = plist[i].get('data-project_state')
             except Exception as e:
                 print 'created ' + cid + ' of project may have a problem.'

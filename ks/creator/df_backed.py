@@ -25,9 +25,9 @@ def df_backed(bac_soup, cid):
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]
-                category = re.sub('^https://www.kickstarter.com/discover/categories/', '',
-                                  plist[i].find_all('a')[1].get('href')).split('?')[0]
-                title = re.sub('[:$]', '', plist[i].find_all('a')[2].text)
+                category = re.sub('^http://www.kickstarter.com/discover/categories/', '',
+                                  plist[i].find('a', class_='navy-600').get('href')).split('?')[0]
+                title = re.sub('[:$]', '', plist[i].find('a', class_='navy-700').text)
                 project_state = plist[i].get('data-project_state')
                 creator = plist[i].find_all('span')[1].text
                 creator_link = plist[i].find_all('a')[3].get('href')
