@@ -43,7 +43,7 @@ class Creator:
     def backed(self):
         self.driver.get(self.crt_link)
         # scroll down until all of projects are visible
-        sc.scroll_down_backed()
+        sc.scroll_down_backed(self.driver)
         strainer = SoupStrainer('div', class_='mobius_page')
         bac_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished backed soup'

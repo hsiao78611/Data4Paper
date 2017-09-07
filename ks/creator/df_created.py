@@ -29,6 +29,7 @@ def df_created(crt_soup, cid):
                 title = re.sub('[:$]', '', plist[i].find_all('a')[2].text)
                 project_state = plist[i].get('data-project_state')
             except Exception as e:
+                print 'created ' + cid + ' of project may have a problem.'
                 print e
 
             df_temp = pd.DataFrame({

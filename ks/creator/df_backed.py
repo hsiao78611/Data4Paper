@@ -32,6 +32,7 @@ def df_backed(bac_soup, cid):
                 creator = plist[i].find_all('span')[1].text
                 creator_link = plist[i].find_all('a')[3].get('href')
             except Exception as e:
+                print 'backed ' + cid + ' of project may have a problem.'
                 print e
 
             df_temp = pd.DataFrame({
