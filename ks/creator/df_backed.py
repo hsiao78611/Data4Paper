@@ -29,8 +29,8 @@ def df_backed(bac_soup, cid):
                                   plist[i].find('a', class_='navy-600').get('href')).split('?')[0]
                 title = re.sub('[:$]', '', plist[i].find('a', class_='navy-700').text)
                 project_state = plist[i].get('data-project_state')
-                creator = plist[i].find_all('span')[1].text
-                creator_link = plist[i].find_all('a')[3].get('href')
+                creator = plist[i].find('span', class_='bold').text
+                creator_link = plist[i].find_all('a')[-1].get('href')
             except Exception as e:
                 print 'backed ' + cid + ' of project may have a problem.'
                 print e
