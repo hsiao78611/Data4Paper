@@ -52,7 +52,9 @@ class Creator:
 
     # it needs webdriver to get the content derived from javascript
     def created(self):
-        self.driver.get(self.crt_link + '/created')
+        link = self.crt_link + '/created'
+        print link
+        self.driver.get(link)
         strainer = SoupStrainer('div', class_='grid-row flex flex-wrap')
         crt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished created soup'
