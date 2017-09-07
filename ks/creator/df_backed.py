@@ -4,7 +4,7 @@ import re
 def df_backed(bac_soup, cid):
 
     df = pd.DataFrame({
-        'cid': [],
+        'cid': [cid],
         'pid': [],
         'backers_count': [],
         'percent_raised': [],

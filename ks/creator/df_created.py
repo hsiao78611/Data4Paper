@@ -4,7 +4,7 @@ import re
 def df_created(crt_soup, cid):
 
     df = pd.DataFrame({
-        'cid': [],
+        'cid': [cid],
         'pid': [],
         'backers_count': [],
         'percent_raised': [],
