@@ -7,7 +7,7 @@ from random import randint
 
 import pandas as pd
 
-import ks.individual.proj_crawler
+import ks.creator.crt_crawler
 import ks.utils.renewip as new
 import ks.utils.record as rec
 import ks.utils.getlink
@@ -57,7 +57,7 @@ def crawler(id):
     # used to record processing time
     start_time = time.time()
 
-    crt = ks.creator.crt_crawler.Creater(crt_lnk + cid, cid)
+    crt = ks.creator.crt_crawler.Creator(crt_lnk + cid, cid)
     print 'loading ' + cid + '- project: ' + pids[id]
 
     # dataframe

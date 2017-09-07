@@ -2,6 +2,17 @@ import pandas as pd
 import re
 
 def df_about(abt_soup, cid):
+    df = pd.DataFrame({
+        'cid': [],
+        'name': [],
+        'joined_date': [],
+        'location': [],
+        'backed_count': [],
+        'created_count': [],
+        'comments_count': [],
+        'biography': [],
+        'website_list': []
+    })
 
     try:
         name = abt_soup.find_all('a', attrs={'href':'/profile/hello'})[1].text
