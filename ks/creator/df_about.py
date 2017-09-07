@@ -3,24 +3,24 @@ import re
 
 def df_about(abt_soup, cid):
 
-    df = pd.DataFrame({
-        'cid': [cid],
-        'name': ['non-exist'],
-        'joined_date': ['non-exist'],
-        'location': ['non-exist'],
-        'backed_count': ['non-exist'],
-        'created_count': ['non-exist'],
-        'comments_count': ['non-exist'],
-        'biography': ['non-exist'],
-        'website_list': ['non-exist']
-    })
-
-    if abt_soup != 'non-exist':
+    if abt_soup == 'non-exist':
+        df = pd.DataFrame({
+            'cid': [cid],
+            'name': ['non-exist'],
+            'joined_date': [None],
+            'location': [None],
+            'backed_count': [None],
+            'created_count': [None],
+            'comments_count': [None],
+            'biography': [None],
+            'website_list': [None]
+        })
+    else:
         try:
             name = abt_soup.find('h2', class_='mb2').text.strip()
             joined_date = abt_soup.find('time', class_='js-adjust-time').get('datetime')
-            loc_exist = abt_soup.find('span', class_='location').text.strip()
-            location = loc_exist if loc_exist != None else None
+            loc_exist = abt_soup.find('span', class_='location')
+            location = loc_exist.text.strip() if loc_exist != None else None
             backed_count = int(re.sub('[^\d]','',abt_soup.find('span', class_='backed').text))
             crt_exist = abt_soup.find('a', class_='js-created-link')
             created_count = int(re.sub('[^\d]','', crt_exist.text)) if crt_exist != None else None
