@@ -47,17 +47,15 @@ class Creator:
         strainer = SoupStrainer('div', class_='mobius_page')
         bac_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished backed soup'
-        self.driver.quit()
         return df_backed(bac_soup, self.cid)
 
     # it needs webdriver to get the content derived from javascript
     def created(self):
-        link = self.crt_link + '/created'
-        print link
-        self.driver.get(link)
+        self.driver.get(self.crt_link + '/created')
         strainer = SoupStrainer('div', class_='grid-row flex flex-wrap')
         crt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
         print 'finished created soup'
+        # finished 'backed' and 'created'
         self.driver.quit()
         return df_created(crt_soup, self.cid)
 
