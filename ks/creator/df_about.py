@@ -26,7 +26,8 @@ def df_about(abt_soup, cid):
         comments_count = int(re.sub('[^\d]', '', cmt_exist.text)) if cmt_exist != None else None
         biography = abt_soup.find('div', class_='col-full col-sm-15-20 col-md-11-16').text.strip()
         website_list = []
-        website_list_html = abt_soup.find('ul', class_='menu-submenu mb6').find_all('li')
+        if_website = abt_soup.find('ul', class_='menu-submenu mb6')
+        website_list_html = if_website.find_all('li') if if_website != None else []
         for i in range(len(website_list_html)):
             website_list = website_list + [website_list_html[i].text.strip()]
 
