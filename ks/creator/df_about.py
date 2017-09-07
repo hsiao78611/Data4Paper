@@ -2,17 +2,6 @@ import pandas as pd
 import re
 
 def df_about(abt_soup, cid):
-    df = pd.DataFrame({
-        'cid': [],
-        'name': [],
-        'joined_date': [],
-        'location': [],
-        'backed_count': [],
-        'created_count': [],
-        'comments_count': [],
-        'biography': [],
-        'website_list': []
-    })
 
     try:
         name = abt_soup.find_all('h2', class_='mb2')[1].text
@@ -30,20 +19,21 @@ def df_about(abt_soup, cid):
         for i in range(len(website_list_html)):
             website_list = website_list + [website_list_html[i].text.strip()]
 
+        df = pd.DataFrame({
+            'cid': [cid],
+            'name': [name],
+            'joined_date': [joined_date],
+            'location': [location],
+            'backed_count': [backed_count],
+            'created_count': [created_count],
+            'comments_count': [comments_count],
+            'biography': [biography],
+            'website_list': [website_list]
+        })
+
     except Exception as e:
         print 'about '+ cid +' of project may have a problem.'
         print e
 
-    df = pd.DataFrame({
-        'cid': [cid],
-        'name': [name],
-        'joined_date': [joined_date],
-        'location': [location],
-        'backed_count': [backed_count],
-        'created_count': [created_count],
-        'comments_count': [comments_count],
-        'biography': [biography],
-        'website_list': [website_list]
-    })
 
     return df
