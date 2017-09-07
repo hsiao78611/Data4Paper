@@ -58,7 +58,7 @@ def crawler(id):
     start_time = time.time()
 
     crt = ks.creator.crt_crawler.Creator(crt_lnk + cid, cid)
-    print 'loading ' + cid + '- project: ' + pids[id]
+    print 'loading ' + cid + ' - project: ' + pids[id]
 
     # dataframe
     df_about = crt.about()
