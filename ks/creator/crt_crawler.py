@@ -47,7 +47,7 @@ class Creator:
             abt_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
             print 'finished about soup'
         else:
-            abt_soup = None
+            abt_soup = 'non-exist'
         return df_about(abt_soup, self.cid)
 
     def backed(self):
@@ -59,7 +59,7 @@ class Creator:
             bac_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
             print 'finished backed soup'
         else:
-            bac_soup = None
+            bac_soup = 'non-exist'
         return df_backed(bac_soup, self.cid)
 
     # it needs webdriver to get the content derived from javascript
@@ -72,7 +72,7 @@ class Creator:
             # finished 'backed' and 'created'
             self.driver.quit()
         else:
-            crt_soup = None
+            crt_soup = 'non-exist'
         return df_created(crt_soup, self.cid)
 
 

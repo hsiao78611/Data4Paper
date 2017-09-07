@@ -5,17 +5,17 @@ def df_about(abt_soup, cid):
 
     df = pd.DataFrame({
         'cid': [cid],
-        'name': [],
-        'joined_date': [],
-        'location': [],
-        'backed_count': [],
-        'created_count': [],
-        'comments_count': [],
-        'biography': [],
-        'website_list': []
+        'name': ['non-exist'],
+        'joined_date': ['non-exist'],
+        'location': ['non-exist'],
+        'backed_count': ['non-exist'],
+        'created_count': ['non-exist'],
+        'comments_count': ['non-exist'],
+        'biography': ['non-exist'],
+        'website_list': ['non-exist']
     })
 
-    if abt_soup != None:
+    if abt_soup != 'non-exist':
         try:
             name = abt_soup.find('h2', class_='mb2').text.strip()
             joined_date = abt_soup.find('time', class_='js-adjust-time').get('datetime')
