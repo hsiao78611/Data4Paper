@@ -10,6 +10,7 @@ import pandas as pd
 import ks.individual.proj_crawler
 import ks.utils.renewip as new
 import ks.utils.record as rec
+import ks.utils.getlink
 from ks.utils.alnum import get_current_datetime
 
 # thread-based Pool
@@ -33,7 +34,7 @@ conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
 conn_created = sqlite3.connect(directory + '/' + 'created.db')
 
 # list of creators
-crt_ids = ks.utils.getlink.links('crt_ids')
+crt_ids = ks.utils.getlink.crt_links('crt_ids')
 cids = list(crt_ids['proj_creator_id'])
 pids = list(crt_ids['pid'])
 

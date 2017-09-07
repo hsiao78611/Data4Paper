@@ -11,12 +11,12 @@ def _conn(name):
     conn = sqlite3.connect(directory + '/' + name + '.db')
     return conn
 
-def links(name):
+def proj_links(name):
     conn = _conn(name)
     df = pd.read_sql_query('SELECT proj_url, pid FROM '+ name +' GROUP BY proj_url', conn)
     return df
 
-# def crt_links(name):
-#     conn = _conn(name)
-#     df = pd.read_sql_query('SELECT creator_link FROM explore GROUP BY creator_link', conn)
-#     return list(df['c_link'])
+def crt_links(name):
+    conn = _conn(name)
+    df = pd.read_sql_query('SELECT * FROM '+ name, conn)
+    return df
