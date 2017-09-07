@@ -15,7 +15,7 @@ def df_about(abt_soup, cid):
     })
 
     try:
-        name = abt_soup.find_all('a', attrs={'href':'/profile/hello'})[1].text
+        name = abt_soup.find_all('h2', class_='mb2')[1].text
         joined_date = abt_soup.find('time', class_='js-adjust-time').get('datetime')
         loc_exist = abt_soup.find('span', class_='location').text.strip()
         location = loc_exist.text.strip() if loc_exist != None else None
