@@ -22,24 +22,16 @@ def df_backed(bac_soup, cid):
         for i in range(len(plist)):
             try:
                 pid = plist[i].get('data-project_pid')
-                print pid
                 backers_count = plist[i].get('data-project_backers_count')
-                print backers_count
                 percent_raised = plist[i].get('data-project_percent_raised')
-                print percent_raised
                 link = plist[i].find('a').get('href').split('?')[0]
-                print link
                 category = re.sub('^http://www.kickstarter.com/discover/categories/', '',
                                   plist[i].find('a', class_='navy-600').get('href')).split('?')[0]
-                print category
                 title = re.sub('[:$]', '', plist[i].find('a', class_='navy-700').text)
-                print title
                 project_state = plist[i].get('data-project_state')
-                print project_state
-                creator = plist[i].find('span', class_='bold').text
-                print creator
-                creator_link = plist[i].find_all('a')[-1].get('href')
-                print creator_link
+                crt_name = plist[i].find('span', class_='bold')
+                creator = crt_name.text if crt_name != None else plist[i].find('a', class_='navy-700 medium').text
+                creator_link = plist[i].find_all('a')[-1].get('href') if crt_name != None else plist[i].find('a', class_='navy-700 medium').get('href').split('?')[0]
             except Exception as e:
                 print 'backed ' + cid + ' of project may have a problem.'
                 print e
