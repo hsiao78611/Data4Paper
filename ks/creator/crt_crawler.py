@@ -60,13 +60,13 @@ class Creator:
         return df_created(crt_soup, self.cid)
 
 
-    def comments(self):
-        # get the web page
-        self.driver.get(self.crt_link + '/comments')
-        # scroll down until all of projects are visible
-        sc.scroll_down_users_comment()
-        strainer = SoupStrainer('ul', class_='mobius')
-        cmt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
-        print 'finished comments soup'
-        self.driver.quit()
-        return df_comments(cmt_soup, self.pid)
+    # def comments(self):
+    #     # get the web page
+    #     self.driver.get(self.crt_link + '/comments')
+    #     # scroll down until all of projects are visible
+    #     sc.scroll_down_users_comment()
+    #     strainer = SoupStrainer('ul', class_='mobius')
+    #     cmt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
+    #     print 'finished comments soup'
+    #     self.driver.quit()
+    #     return df_comments(cmt_soup, self.pid)

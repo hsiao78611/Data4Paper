@@ -11,7 +11,7 @@ def _conn(name):
     conn = sqlite3.connect(directory + '/' + name + '.db')
     return conn
 
-def proj_links(name):
+def links(name):
     conn = _conn(name)
     df = pd.read_sql_query('SELECT proj_url, pid FROM '+ name +' GROUP BY proj_url', conn)
     return df
