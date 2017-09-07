@@ -32,6 +32,7 @@ def df_about(abt_soup, cid):
             website_list_html = if_website.find_all('li') if if_website != None else []
             for i in range(len(website_list_html)):
                 website_list = website_list + [website_list_html[i].text.strip()]
+            website_list = ','.join(website_list)
 
             df = pd.DataFrame({
                 'cid': [cid],
