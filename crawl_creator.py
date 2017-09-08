@@ -36,10 +36,20 @@ def __init__(self):
     self.cids = list(crt_ids['proj_creator_id'])
     self.pids = list(crt_ids['pid'])
 
-def random_order(self):
+def todo(self):
     # randomise crawling order
     crt_lst = range(len(self.cids))
     random.shuffle(crt_lst)
+
+    # if there exists the record, load it.
+    # then remove(pop) the index of crawled data
+    record = rec.Record('record_creator')
+    rec_df = record.get_record()
+    if not rec_df.empty:
+        rec_index = list(set(list(rec_df['index'])))
+        while rec_index:
+            crt_lst.remove(rec_index.pop())
+
     return crt_lst
 
 def crawler(self, id):
@@ -82,14 +92,6 @@ def worker(self, queue):
     self.crawler.que = queue
 
 if __name__ == '__main__':
-    # if there exists the record, load it.
-    # then remove(pop) the index of crawled data
-    record = rec.Record('record_creator')
-    rec_df = record.get_record()
-    if not rec_df.empty:
-        rec_index = list(set(list(rec_df['index'])))
-        while rec_index:
-            crt_lst.remove(rec_index.pop())
 
     ## crawling one by one
     # while crt_lst:
@@ -100,7 +102,7 @@ if __name__ == '__main__':
     try:
         the_queue = Queue()
         pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-        pool.imap(crawler, random_order())
+        pool.imap(crawler, todo())
         pool.close()
         while True:
             the_queue.get(True)
