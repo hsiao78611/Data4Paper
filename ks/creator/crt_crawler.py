@@ -1,6 +1,7 @@
 import re
 import urllib2
 from random import randint
+import signal
 
 from bs4 import BeautifulSoup, SoupStrainer
 
