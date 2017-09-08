@@ -25,9 +25,9 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 # Create connections.
-conn_about = sqlite3.connect(directory + '/' + 'about.db')
-conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
-conn_created = sqlite3.connect(directory + '/' + 'created.db')
+conn_about = sqlite3.connect(directory + '/' + 'about.db', timeout=10.0, check_same_thread=False)
+conn_backed = sqlite3.connect(directory + '/' + 'backed.db', timeout=10.0, check_same_thread=False)
+conn_created = sqlite3.connect(directory + '/' + 'created.db', timeout=10.0, check_same_thread=False)
 
 # list of creators
 crt_ids = ks.utils.getlink.crt_links('crt_ids')
@@ -77,12 +77,13 @@ def crawler(id):
         # record what already be loaded
         record.save_record(pids[id], id)
 
+    ## crawling one by one
+    # _save_df()
+
     # crawling via multiprocessing and queue
     # put it in a queue then get a permission
     crawler.que.put(_save_df())
 
-    ## crawling one by one
-    # _save_df()
 
 # setting an attribute named 'que' on the function object 'crawler'
 def worker(queue):
