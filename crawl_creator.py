@@ -34,21 +34,19 @@ crt_ids = ks.utils.getlink.crt_links('crt_ids')
 cids = list(crt_ids['proj_creator_id'])
 pids = list(crt_ids['pid'])
 
-def todo(cids):
-    # randomise crawling order
-    crt_lst = range(len(cids))
-    random.shuffle(crt_lst)
+# randomise crawling order
+crt_lst = range(len(cids))
+random.shuffle(crt_lst)
 
-    # if there exists the record, load it.
-    # then remove(pop) the index of crawled data
-    record = rec.Record('record_creator')
-    rec_df = record.get_record()
-    if not rec_df.empty:
-        rec_index = list(set(list(rec_df['index'])))
-        while rec_index:
-            crt_lst.remove(rec_index.pop())
+# if there exists the record, load it.
+# then remove(pop) the index of crawled data
+record = rec.Record('record_creator')
+rec_df = record.get_record()
+if not rec_df.empty:
+    rec_index = list(set(list(rec_df['index'])))
+    while rec_index:
+        crt_lst.remove(rec_index.pop())
 
-    return crt_lst
 
 def crawler(id):
     crt_lnk = 'https://www.kickstarter.com/profile/'
@@ -100,7 +98,7 @@ if __name__ == '__main__':
     try:
         the_queue = Queue()
         pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-        pool.imap(crawler, todo(cids))
+        pool.imap(crawler, crt_lst)
         pool.close()
         while True:
             the_queue.get(True)
