@@ -19,26 +19,24 @@ from multiprocessing import cpu_count
 from multiprocessing import Queue
 import traceback
 
+# create a directory
+directory = os.getcwd() + '/' + 'RECORD'  # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+if not os.path.exists(directory):
+    os.makedirs(directory)
 
-def __init__(self):
-    # create a directory
-    directory = os.getcwd() + '/' + 'RECORD'  # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+# Create connections.
+conn_about = sqlite3.connect(directory + '/' + 'about.db')
+conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
+conn_created = sqlite3.connect(directory + '/' + 'created.db')
 
-    # Create connections.
-    self.conn_about = sqlite3.connect(directory + '/' + 'about.db')
-    self.conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
-    self.conn_created = sqlite3.connect(directory + '/' + 'created.db')
+# list of creators
+crt_ids = ks.utils.getlink.crt_links('crt_ids')
+cids = list(crt_ids['proj_creator_id'])
+pids = list(crt_ids['pid'])
 
-    # list of creators
-    crt_ids = ks.utils.getlink.crt_links('crt_ids')
-    self.cids = list(crt_ids['proj_creator_id'])
-    self.pids = list(crt_ids['pid'])
-
-def todo(self):
+def todo(cids):
     # randomise crawling order
-    crt_lst = range(len(self.cids))
+    crt_lst = range(len(cids))
     random.shuffle(crt_lst)
 
     # if there exists the record, load it.
@@ -52,11 +50,10 @@ def todo(self):
 
     return crt_lst
 
-def crawler(self, id):
-
+def crawler(id):
     crt_lnk = 'https://www.kickstarter.com/profile/'
-    cid = self.cids[id]
-    pid = self.pids[id]
+    cid = cids[id]
+    pid = pids[id]
 
     # used to record processing time
     start_time = time.time()
@@ -73,23 +70,23 @@ def crawler(self, id):
     print exe_time
 
     # save to 'sqlite'
-    def _save_df(self):
-        df_about.to_sql(name = 'about', con = self.conn_about, if_exists = 'append', index = False)
-        df_backed.to_sql(name = 'backed', con = self.conn_backed, if_exists = 'append', index = False)
-        df_created.to_sql(name = 'created', con = self.conn_created, if_exists = 'append', index = False)
+    def _save_df():
+        df_about.to_sql(name = 'about', con = conn_about, if_exists = 'append', index = False)
+        df_backed.to_sql(name = 'backed', con = conn_backed, if_exists = 'append', index = False)
+        df_created.to_sql(name = 'created', con = conn_created, if_exists = 'append', index = False)
         # record what already be loaded
         record.save_record(pids[id], id)
 
     # crawling via multiprocessing and queue
     # put it in a queue then get a permission
-    self.crawler.que.put(_save_df())
+    crawler.que.put(_save_df())
 
     ## crawling one by one
     # _save_df()
 
 # setting an attribute named 'que' on the function object 'crawler'
-def worker(self, queue):
-    self.crawler.que = queue
+def worker(queue):
+    crawler.que = queue
 
 if __name__ == '__main__':
 
@@ -102,7 +99,7 @@ if __name__ == '__main__':
     try:
         the_queue = Queue()
         pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-        pool.imap(crawler, todo())
+        pool.imap(crawler, todo(cids))
         pool.close()
         while True:
             the_queue.get(True)
