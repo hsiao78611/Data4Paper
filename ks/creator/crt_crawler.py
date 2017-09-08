@@ -45,7 +45,6 @@ class Creator:
             response = urllib2.urlopen(request)
             strainer = SoupStrainer('main', attrs={'role': 'main'})
             abt_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-            print 'finished about soup'
         else:
             abt_soup = 'non-exist'
         return df_about(abt_soup, self.cid)
@@ -57,7 +56,6 @@ class Creator:
             sc.scroll_down_backed(self.driver)
             strainer = SoupStrainer('div', class_='mobius_page')
             bac_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
-            print 'finished backed soup'
         else:
             bac_soup = 'non-exist'
         return df_backed(bac_soup, self.cid)
@@ -68,8 +66,8 @@ class Creator:
             self.driver.get(self.crt_link + '/created')
             strainer = SoupStrainer('div', class_='grid-row flex flex-wrap')
             crt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
-            print 'finished created soup'
             # finished 'backed' and 'created'
+            self.driver.service.process.send_signal(signal.SIGTERM)
             self.driver.quit()
         else:
             crt_soup = 'non-exist'
