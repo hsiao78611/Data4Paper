@@ -20,6 +20,28 @@ from multiprocessing import Queue
 import traceback
 
 
+def __init__(self):
+    # create a directory
+    directory = os.getcwd() + '/' + 'RECORD'  # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # Create connections.
+    self.conn_about = sqlite3.connect(directory + '/' + 'about.db')
+    self.conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
+    self.conn_created = sqlite3.connect(directory + '/' + 'created.db')
+
+    # list of creators
+    crt_ids = ks.utils.getlink.crt_links('crt_ids')
+    self.cids = list(crt_ids['proj_creator_id'])
+    self.pids = list(crt_ids['pid'])
+
+def random_order(self):
+    # randomise crawling order
+    crt_lst = range(len(self.cids))
+    random.shuffle(crt_lst)
+    return crt_lst
+
 def crawler(self, id):
 
     crt_lnk = 'https://www.kickstarter.com/profile/'
@@ -59,27 +81,7 @@ def crawler(self, id):
 def worker(self, queue):
     self.crawler.que = queue
 
-def main(self):
-
-    # create a directory
-    directory = os.getcwd() + '/' + 'RECORD'  # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-    # Create connections.
-    self.conn_about = sqlite3.connect(directory + '/' + 'about.db')
-    self.conn_backed = sqlite3.connect(directory + '/' + 'backed.db')
-    self.conn_created = sqlite3.connect(directory + '/' + 'created.db')
-
-    # list of creators
-    crt_ids = ks.utils.getlink.crt_links('crt_ids')
-    self.cids = list(crt_ids['proj_creator_id'])
-    self.pids = list(crt_ids['pid'])
-
-    # randomise crawling order
-    crt_lst = range(len(cids))
-    random.shuffle(crt_lst)
-
+if __name__ == '__main__':
     # if there exists the record, load it.
     # then remove(pop) the index of crawled data
     record = rec.Record('record_creator')
@@ -98,7 +100,7 @@ def main(self):
     try:
         the_queue = Queue()
         pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-        pool.imap(crawler, crt_lst)
+        pool.imap(crawler, random_order())
         pool.close()
         while True:
             the_queue.get(True)
@@ -112,5 +114,3 @@ def main(self):
     conn_created.close()
 
 
-if __name__ == '__main__':
-    main()
