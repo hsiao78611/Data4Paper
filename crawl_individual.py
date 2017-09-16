@@ -41,22 +41,22 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_sam
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.proj_links('all_date_2015')
-proj_lnks = list(pid_lnk['proj_url'])
-pids = list(pid_lnk['pid'])
+# pid_lnk = ks.utils.getlink.proj_links('all_date_2015')
+proj_lnks = ['https://www.kickstarter.com/projects/elanlee/exploding-kittens/comments', 'https://www.kickstarter.com/projects/the-mermaids/the-mermaids-amphetamines-and-flowers', 'https://www.kickstarter.com/projects/13861848/camelot-unchained/description']#list(pid_lnk['proj_url'])
+pids = [67075,89735,75889]#list(pid_lnk['pid'])
 
 # randomise crawling order
 id_lst = range(len(proj_lnks))
 random.shuffle(id_lst)
 
-# if there exists the record, load it.
-# then remove(pop) the index of crawled data
-record = rec.Record('record_individual_2015')
-rec_df = record.get_record()
-if not rec_df.empty:
-    rec_index = list(set(list(rec_df['index'])))
-    while rec_index:
-        id_lst.remove(rec_index.pop())
+# # if there exists the record, load it.
+# # then remove(pop) the index of crawled data
+# record = rec.Record('record_individual_2015')
+# rec_df = record.get_record()
+# if not rec_df.empty:
+#     rec_index = list(set(list(rec_df['index'])))
+#     while rec_index:
+#         id_lst.remove(rec_index.pop())
 
 def crawler(id):
     pid = pids[id]
@@ -89,33 +89,33 @@ def crawler(id):
         # record what already be loaded
         record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
 
-    # crawling via multiprocessing and queue
-    # put it in a queue then get a permission
-    crawler.que.put(_save_df())
+    # # crawling via multiprocessing and queue
+    # # put it in a queue then get a permission
+    # crawler.que.put(_save_df())
 
-    ## crawling one by one
-    # _save_df()
+    # crawling one by one
+    _save_df()
 
-## crawling one by one
-# while id_lst:
-#     id = id_lst.pop()
-#     crawler(id)
+# crawling one by one
+while id_lst:
+    id = id_lst.pop()
+    crawler(id)
 
-# crawling via multiprocessing and queue
-def worker(queue):
-    crawler.que = queue
-
-try:
-    the_queue = Queue()
-    pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-    pool.imap(crawler, id_lst)
-    pool.close()
-    while True:
-        the_queue.get(True)
-except Exception as e:
-    print e
-    traceback.print_exc()
-    print get_current_datetime()
+# # crawling via multiprocessing and queue
+# def worker(queue):
+#     crawler.que = queue
+#
+# try:
+#     the_queue = Queue()
+#     pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
+#     pool.imap(crawler, id_lst)
+#     pool.close()
+#     while True:
+#         the_queue.get(True)
+# except Exception as e:
+#     print e
+#     traceback.print_exc()
+#     print get_current_datetime()
 
 conn_proj.close()
 conn_rew.close()
