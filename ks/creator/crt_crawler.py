@@ -27,11 +27,8 @@ class Creator:
         self.crt_link = crt_link
         self.cid = cid
 
-        # set a web driver with the size
-        self.driver = sw.set_driver(910, 1820)
-
         # communicate with TOR via a local proxy (privoxy)
-        new.renew_connection()
+        # new.renew_connection()
 
         # some creator account is not existent, such as id: 128262571
         request = urllib2.Request(self.crt_link)
@@ -52,11 +49,15 @@ class Creator:
 
     def backed(self):
         if self.active:
-            self.driver.get(self.crt_link)
+            # set a web driver with the size
+            driver = sw.set_driver(910, 600)
+            driver.get(self.crt_link)
             # scroll down until all of projects are visible
-            sc.scroll_down_backed(self.driver)
+            sc.scroll_down_backed(driver)
             strainer = SoupStrainer('div', class_='mobius_page')
-            bac_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
+            bac_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
+            driver.service.process.send_signal(signal.SIGTERM)
+            driver.quit()
         else:
             bac_soup = 'non-exist'
         return df_backed(bac_soup, self.cid)
@@ -64,14 +65,16 @@ class Creator:
     # it needs webdriver to get the content derived from javascript
     def created(self):
         if self.active:
-            self.driver.get(self.crt_link + '/created')
+            # set a web driver with the size
+            driver = sw.set_driver(910, 600)
+            driver.get(self.crt_link + '/created')
             strainer = SoupStrainer('div', class_='grid-row flex flex-wrap')
-            crt_soup = BeautifulSoup(self.driver.page_source, 'lxml', parse_only=strainer)
+            crt_soup = BeautifulSoup(driver.page_source, 'lxml', parse_only=strainer)
+            driver.service.process.send_signal(signal.SIGTERM)
+            driver.quit()
         else:
             crt_soup = 'non-exist'
-        # finished 'backed' and 'created'
-        self.driver.service.process.send_signal(signal.SIGTERM)
-        self.driver.quit()
+
         return df_created(crt_soup, self.cid)
 
 

@@ -16,7 +16,7 @@ def df_backed(bac_soup, cid):
         'project_state': []
     })
 
-    if bac_soup != None:
+    if bac_soup != None | bac_soup != 'non-exist':
         plist = bac_soup.find_all('div', class_='js-track-project-card')
 
         for i in range(len(plist)):

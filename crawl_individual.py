@@ -42,21 +42,21 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_sam
 
 # list of successful projects
 # pid_lnk = ks.utils.getlink.proj_links('all_date_2015')
-proj_lnks = ['https://www.kickstarter.com/projects/elanlee/exploding-kittens/comments', 'https://www.kickstarter.com/projects/the-mermaids/the-mermaids-amphetamines-and-flowers', 'https://www.kickstarter.com/projects/13861848/camelot-unchained/description']#list(pid_lnk['proj_url'])
-pids = [67075,89735,75889] #list(pid_lnk['pid'])
+proj_lnks = ['https://www.kickstarter.com/projects/elanlee/exploding-kittens', 'https://www.kickstarter.com/projects/the-mermaids/the-mermaids-amphetamines-and-flowers', 'https://www.kickstarter.com/projects/13861848/camelot-unchained/description']#list(pid_lnk['proj_url'])
+pids = ['67075','89735','75889'] #list(pid_lnk['pid'])
 
 # randomise crawling order
 id_lst = range(len(proj_lnks))
 random.shuffle(id_lst)
 
-# # if there exists the record, load it.
-# # then remove(pop) the index of crawled data
-# record = rec.Record('record_individual_2015')
-# rec_df = record.get_record()
-# if not rec_df.empty:
-#     rec_index = list(set(list(rec_df['index'])))
-#     while rec_index:
-#         id_lst.remove(rec_index.pop())
+# if there exists the record, load it.
+# then remove(pop) the index of crawled data
+record = rec.Record('record_individual_ˇ')
+rec_df = record.get_record()
+if not rec_df.empty:
+    rec_index = list(set(list(rec_df['index'])))
+    while rec_index:
+        id_lst.remove(rec_index.pop())
 
 def crawler(id):
     pid = pids[id]
