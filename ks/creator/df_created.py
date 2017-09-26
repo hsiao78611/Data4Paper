@@ -14,7 +14,7 @@ def df_created(crt_soup, cid):
         'project_state': []
     })
 
-    if crt_soup != None & crt_soup != 'non-exist':
+    if (crt_soup != None) & (crt_soup != 'non-exist'):
         plist = crt_soup.find_all('div', class_='js-track-project-card')
 
         for i in range(len(plist)):

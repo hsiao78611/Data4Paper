@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 from random import randint
+import re
 
 def _scroll_down(driver, load_more_button_Xpath):
 
@@ -91,7 +92,7 @@ def scroll_down_explore(driver, total):
 
 
 def scroll_down_backed(driver):
-    total = int(driver.find_element_by_xpath('//*[@id="main_content"]/div[3]/div/div/div/ul/li[2]/a/span').text)
+    total = int(re.sub('[^\d]', '', driver.find_element_by_xpath('//*[@id="main_content"]/div[3]/div/div/div/ul/li[2]/a/span').text))
     page = 1
     pages = total / 36 + (1 if total % 36 > 0 else 0)
     while page != pages:
