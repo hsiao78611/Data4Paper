@@ -42,13 +42,8 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_sam
 
 # list of successful projects
 # pid_lnk = ks.utils.getlink.proj_links('all_date_2015')
-proj_lnks = ['https://www.kickstarter.com/projects/elanlee/exploding-kittens',
-             'https://www.kickstarter.com/projects/the-mermaids/the-mermaids-amphetamines-and-flowers',
-             'https://www.kickstarter.com/projects/13861848/camelot-unchained',
-             'https://www.kickstarter.com/projects/modulo/modulo-a-simple-modular-solution-for-building-elec',
-             'https://www.kickstarter.com/projects/impressionpi/impression-mobile-vr-ar-with-gesture-position-trac',
-             'https://www.kickstarter.com/projects/1055028389/piggy-maternity-ward-aka-farrowing-house']#list(pid_lnk['proj_url'])
-pids = ['67075','89735','1682353635','1057752953','1597242967','1470512719'] #list(pid_lnk['pid'])
+proj_lnks = list(pid_lnk['proj_url'])
+pids = list(pid_lnk['pid'])
 # 1955357092,1248082991,1682353635
 # randomise crawling order
 id_lst = range(len(proj_lnks))
