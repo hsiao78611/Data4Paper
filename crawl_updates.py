@@ -30,13 +30,13 @@ conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.proj_links('updates')
+pid_lnk = ks.utils.getlink.upd_links('updates')
 pids = list(pid_lnk['pid'])
 upd_ids = list(pid_lnk['upd_id'])
 upd_lnks = list(pid_lnk['upd_url'])
 
 # randomise crawling order
-id_lst = range(len(proj_lnks))
+id_lst = range(len(upd_lnks))
 random.shuffle(id_lst)
 
 # if there exists the record, load it.
@@ -55,7 +55,7 @@ def crawler(id):
     start_time = time.time()
 
     # dataframe
-    df_upd = ks.individual.upd_crawler.update(upd_lnks[id], pid, upd_id)
+    df_upd = ks.individual.upd_crawler.update('https://www.kickstarter.com'+upd_lnks[id], pid, upd_id)
     print 'loading ' + pid + ': ' + upd_id + ': ' + upd_lnks[id]
     exe_time = time.time() - start_time
     print exe_time

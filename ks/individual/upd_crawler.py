@@ -19,13 +19,13 @@ def update(upd_link, pid, upd_id):
     # get a random agent
     agents_lst = ua.get_user_agents()
     user_agent = list(agents_lst)[randint(0, len(agents_lst) - 1)]
-    self.headers = {'User-Agent': user_agent}
+    headers = {'User-Agent': user_agent}
 
     # communicate with TOR via a local proxy (privoxy)
     new.renew_connection()
 
     # Speeding up BeautifulSoup by using SoupStrainer and lxml parser
-    request = urllib2.Request(self.upd_link, None, self.headers)
+    request = urllib2.Request(upd_link, None, headers)
     response = urllib2.urlopen(request)
     upd_soup = BeautifulSoup(response, 'lxml')
 
