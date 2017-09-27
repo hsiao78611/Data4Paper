@@ -86,7 +86,7 @@ def crawler(id):
         # df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
         # df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
         # record what already be loaded
-        record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
+        record.save_record(pids[id], id) #proj.total_cmt, proj.count_visible_cmt)
 
     # crawling via multiprocessing and queue
     # put it in a queue then get a permission
