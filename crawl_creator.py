@@ -30,9 +30,9 @@ conn_backed = sqlite3.connect(directory + '/' + 'backed.db', timeout=10.0, check
 conn_created = sqlite3.connect(directory + '/' + 'created.db', timeout=10.0, check_same_thread=False)
 
 # list of creators
-# crt_ids = ks.utils.getlink.crt_links('crt_ids')
-cids = ['super-inferno', '814553083', 'impressionpi'] # list(crt_ids['proj_creator_id'])
-pids = ['1247942515','834159126','1597242967'] # list(crt_ids['pid'])
+crt_ids = ks.utils.getlink.crt_links('crt_ids')
+cids = list(crt_ids['proj_creator_id'])
+pids = ist(crt_ids['pid'])
 
 # randomise crawling order'
 crt_lst = range(len(cids))

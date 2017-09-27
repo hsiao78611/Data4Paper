@@ -1,4 +1,3 @@
-import re
 import urllib2
 from random import randint
 import time
@@ -38,9 +37,9 @@ class Campaign:
         strainer = SoupStrainer('main', attrs={'role': 'main'})
         time.sleep(randint(1, 3))
         proj_soup = BeautifulSoup(response, 'lxml', parse_only=strainer)
-        rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
+        # rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
         response.close()
-        return [df_project(proj_soup, self.pid), df_rewards(rew_soup, self.pid)]
+        return [df_project(proj_soup, self.pid) ]#, df_rewards(rew_soup, self.pid)]
 
     def updates(self):
         request = urllib2.Request(self.ks_link + '/updates', None, self.headers)
