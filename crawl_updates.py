@@ -30,7 +30,7 @@ conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.proj_links('crawl_updates')
+pid_lnk = ks.utils.getlink.proj_links('updates')
 pids = list(pid_lnk['pid'])
 upd_ids = list(pid_lnk['upd_id'])
 upd_lnks = list(pid_lnk['upd_url'])

@@ -33,7 +33,7 @@ def df_project(proj_soup, pid):
         # proj_creator_name = proj_soup.find(attrs = {'data-modal-title' : 'About the creator'}).text.strip()
         # proj_location = proj_soup.find(class_ = 'mr3', href=re.compile('/discover/places/')).text.strip()
 
-        proj_body = proj_soup.find(class_ = 'col col-8 description-container')
+        proj_body = unicode(proj_soup.find(class_ = 'col col-8 description-container'))
 
     except Exception as e:
         print 'project: ' + pid + ' may have a problem.'

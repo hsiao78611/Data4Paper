@@ -20,3 +20,8 @@ def crt_links(name):
     conn = _conn(name)
     df = pd.read_sql_query('SELECT * FROM '+ name, conn)
     return df
+
+def upd_links(name):
+    conn = _conn(name)
+    df = pd.read_sql_query('SELECT upd_url, pid, upd_id FROM '+ name, conn)
+    return df

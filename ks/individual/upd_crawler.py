@@ -39,7 +39,7 @@ def update(upd_link, pid, upd_id):
          })
 
     try:
-        upd_body = upd_soup.find('div', class_='body readability responsive-media formatted-lists')
+        upd_body = unicode(upd_soup.find('div', class_='body readability responsive-media formatted-lists'))
     except Exception as e:
         print 'update ' + str(upd) + ' of project ' + pid + ' may have a problem.'
         print e
