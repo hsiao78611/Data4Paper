@@ -27,7 +27,7 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 # Create connections.
-conn_date_rew = sqlite3.connect(directory + '/' + 'date_rew.db')
+# conn_date_rew = sqlite3.connect(directory + '/' + 'date_rew.db')
 conn_date_fund = sqlite3.connect(directory + '/' + 'date_fund.db')
 
 # randomise crawling order
@@ -37,7 +37,7 @@ random.shuffle(proj_lst)
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
 count_num = 0
-record = rec.Record('record_date_disj')
+record = rec.Record('record_date_fund')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
@@ -69,41 +69,41 @@ while proj_lst:
         'proj_start_date': [],
         'proj_end_date': [],
     })
-    df_rew = pd.DataFrame({
-        'pid': [],
-        'rew_id': [],
-        'rew_amount_required': [],
-        'rew_backer_limit': [],
-        'rew_backer_count': [],
-        'rew_delivery': [],
-    })
+    # df_rew = pd.DataFrame({
+    #     'pid': [],
+    #     'rew_id': [],
+    #     'rew_amount_required': [],
+    #     'rew_backer_limit': [],
+    #     'rew_backer_count': [],
+    #     'rew_delivery': [],
+    # })
 
     try:
         proj_start_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.get('datetime')
         proj_end_date = proj_soup.find('div', class_='NS_campaigns__funding_period').time.find_next().get('datetime')
 
-        # reward
-        rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
-        rew_item = rew_soup.find_all(class_ = 'hover-group')
-
-        for rew in range(len(rew_item)):
-            limit = rew_item[rew].find(class_ = 'pledge__limit')
-            rew_id = rew
-            rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_='money').text))
-            rew_backer_limit = limit.text.strip() if limit != None else None
-            rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_='pledge__backer-count').text))
-            ed_date = rew_item[rew].find('time')
-            rew_delivery = ed_date.get('datetime') if ed_date != None else None
-
-            rew_temp = pd.DataFrame({
-                'pid': [pid],
-                'rew_id': [rew_id],
-                'rew_amount_required': [rew_amount_required],
-                'rew_backer_limit': [rew_backer_limit],
-                'rew_backer_count': [rew_backer_count],
-                'rew_delivery': [rew_delivery],
-                })
-            df_rew = df_rew.append(rew_temp)
+        # # reward
+        # rew_soup = proj_soup.find('div', class_='NS_projects__rewards_list js-project-rewards')
+        # rew_item = rew_soup.find_all(class_ = 'hover-group')
+        #
+        # for rew in range(len(rew_item)):
+        #     limit = rew_item[rew].find(class_ = 'pledge__limit')
+        #     rew_id = rew
+        #     rew_amount_required = int(re.sub('[^\d]', '', rew_item[rew].find(class_='money').text))
+        #     rew_backer_limit = limit.text.strip() if limit != None else None
+        #     rew_backer_count = int(re.sub('[^\d]', '', rew_item[rew].find(class_='pledge__backer-count').text))
+        #     ed_date = rew_item[rew].find('time')
+        #     rew_delivery = ed_date.get('datetime') if ed_date != None else None
+        #
+        #     rew_temp = pd.DataFrame({
+        #         'pid': [pid],
+        #         'rew_id': [rew_id],
+        #         'rew_amount_required': [rew_amount_required],
+        #         'rew_backer_limit': [rew_backer_limit],
+        #         'rew_backer_count': [rew_backer_count],
+        #         'rew_delivery': [rew_delivery],
+        #         })
+        #     df_rew = df_rew.append(rew_temp)
     except Exception as e:
         print e
         print proj_lnks[id]
@@ -112,16 +112,16 @@ while proj_lst:
         try:
             if proj_soup.find('div', attrs={'id': 'hidden_project'}).get('id') == 'hidden_project':
                 print 'hidden project: ' + proj_lnks[id]
-                rew_item = []
-                rew_temp = pd.DataFrame({
-                    'pid': [pid],
-                    'rew_id': ['hidden project'],
-                    'rew_amount_required': ['hidden project'],
-                    'rew_backer_limit': ['hidden project'],
-                    'rew_backer_count': ['hidden project'],
-                    'rew_delivery': ['hidden project'],
-                })
-                df_rew = df_rew.append(rew_temp)
+                # rew_item = []
+                # rew_temp = pd.DataFrame({
+                #     'pid': [pid],
+                #     'rew_id': ['hidden project'],
+                #     'rew_amount_required': ['hidden project'],
+                #     'rew_backer_limit': ['hidden project'],
+                #     'rew_backer_count': ['hidden project'],
+                #     'rew_delivery': ['hidden project'],
+                # })
+                # df_rew = df_rew.append(rew_temp)
                 proj_start_date = 'hidden project'
                 proj_end_date = 'hidden project'
         except Exception as e:
@@ -140,7 +140,7 @@ while proj_lst:
     record.save_record(proj_lnks[id], id, len(rew_item), count_num)
 
     # save to 'sqlite'
-    df_rew.to_sql(name='date_reward', con=conn_date_rew, if_exists='append', index=False)
+    # df_rew.to_sql(name='date_reward', con=conn_date_rew, if_exists='append', index=False)
     df_proj.to_sql(name='date_funding', con=conn_date_fund, if_exists='append', index=False)
 
     print 'finished: ' + str(count_num) + ' ' + proj_lnks[id]
@@ -149,5 +149,5 @@ while proj_lst:
     if count_num % 1000 == 0:
         new.renew_connection()
 
-conn_date_rew.close()
+# conn_date_rew.close()
 conn_date_fund.close()
