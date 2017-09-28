@@ -51,12 +51,13 @@ if not rec_df.empty:
 def crawler(id):
     pid = pids[id]
     upd_id = upd_ids[id]
+    upd_lnk = upd_lnks[id]
     # used to record processing time
     start_time = time.time()
 
     # dataframe
-    df_upd = ks.individual.upd_crawler.update('https://www.kickstarter.com'+upd_lnks[id], pid, upd_id)
-    print 'loading ' + pid + ': ' + upd_id + ': ' + upd_lnks[id]
+    df_upd = ks.individual.upd_crawler.update('https://www.kickstarter.com'+upd_lnk, pid, upd_id)
+    print 'loading ' + pid + ': ' + str(upd_id) + ': https://www.kickstarter.com' + upd_lnk
     exe_time = time.time() - start_time
     print exe_time
 

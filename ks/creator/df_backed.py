@@ -21,7 +21,7 @@ def df_backed(bac_soup, cid):
 
         for i in range(len(plist)):
             try:
-                pid = plist[i].get('data-project_pid')
+                pid = str(plist[i].get('data-project_pid'))
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]

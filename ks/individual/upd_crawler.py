@@ -3,6 +3,7 @@ from random import randint
 import time
 from bs4 import BeautifulSoup, SoupStrainer
 import signal
+import pandas as pd
 
 import ks.utils.renewip as new
 import ks.utils.scrollpage as sc
@@ -47,7 +48,7 @@ def update(upd_link, pid, upd_id):
     upd_temp = pd.DataFrame(
         {'pid': [pid],
          'upd_id': [upd_id],
-         'upd_url': [upd_url],
+         'upd_url': [upd_link],
          'upd_body': [upd_body],
          })
     df = df.append(upd_temp)
