@@ -41,7 +41,7 @@ conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.proj_links('crawl_body')
+pid_lnk = ks.utils.getlink.proj_links('need_add')
 proj_lnks = list(pid_lnk['proj_url'])
 pids = list(pid_lnk['pid'])
 
@@ -51,7 +51,7 @@ random.shuffle(id_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('record_crawl_body')
+record = rec.Record('record_crawl_body_2')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))

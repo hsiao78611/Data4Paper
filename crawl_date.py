@@ -18,8 +18,8 @@ import ks.utils.useragents as ua
 
 
 # list of successful projects
-proj_lnks = list(ks.utils.getlink.proj_links('disj_links')['proj_url'])
-pids = list(ks.utils.getlink.proj_links('disj_links')['pid'])
+proj_lnks = list(ks.utils.getlink.proj_links('need_add')['proj_url'])
+pids = list(ks.utils.getlink.proj_links('need_add')['pid'])
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -37,7 +37,7 @@ random.shuffle(proj_lst)
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
 count_num = 0
-record = rec.Record('record_date_fund')
+record = rec.Record('record_date_fund_2')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
@@ -137,7 +137,7 @@ while proj_lst:
 
     # record what already be loaded
     count_num = count_num + 1
-    record.save_record(proj_lnks[id], id, len(rew_item), count_num)
+    record.save_record(proj_lnks[id], id)#, len(rew_item), count_num)
 
     # save to 'sqlite'
     # df_rew.to_sql(name='date_reward', con=conn_date_rew, if_exists='append', index=False)
