@@ -27,7 +27,7 @@ class Campaign:
         self.headers = {'User-Agent': user_agent}
 
         # communicate with TOR via a local proxy (privoxy)
-        new.renew_connection()
+        # new.renew_connection()
 
     # need using random order?
     def project_rewards(self):

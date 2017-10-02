@@ -41,7 +41,7 @@ conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.proj_links('need_add')
+pid_lnk = ks.utils.getlink.proj_links('re_upd_faq')
 proj_lnks = list(pid_lnk['proj_url'])
 pids = list(pid_lnk['pid'])
 
@@ -51,7 +51,7 @@ random.shuffle(id_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('record_crawl_body_2')
+record = rec.Record('record_re_upd_faq')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
@@ -67,11 +67,11 @@ def crawler(id):
     print 'loading ' + pid + ': ' + proj_lnks[id]
 
     # dataframe
-    proj_rew = proj.project_rewards()
-    df_proj = proj_rew[0]
+    # proj_rew = proj.project_rewards()
+    # df_proj = proj_rew[0]
     # df_rew = proj_rew[1]
     df_upd = proj.updates()
-    # df_faq = proj.faqs()
+    df_faq = proj.faqs()
     # df_cmt = proj.comments()
     exe_time = time.time() - start_time
     print exe_time
@@ -79,10 +79,10 @@ def crawler(id):
 
     # save to 'sqlite'
     def _save_df():
-        df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
+        # df_proj.to_sql(name = 'projects', con = conn_proj, if_exists = 'append', index = False)
         # df_rew.to_sql(name = 'rewards', con = conn_rew, if_exists = 'append', index = False)
         df_upd.to_sql(name = 'updates', con = conn_upd, if_exists = 'append', index = False)
-        # df_faq.to_sql(name='faqs', con=conn_faq, if_exists='append', index=False)
+        df_faq.to_sql(name='faqs', con=conn_faq, if_exists='append', index=False)
         # df_cmt.to_sql(name = 'comments', con = conn_cmt, if_exists = 'append', index = False)
         # df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
         # record what already be loaded
@@ -116,10 +116,10 @@ except Exception as e:
     traceback.print_exc()
     print get_current_datetime()
 
-conn_proj.close()
+# conn_proj.close()
 # conn_rew.close()
 conn_upd.close()
-# conn_faq.close()
+conn_faq.close()
 # conn_cmt.close()
 # conn_time.close()
 
