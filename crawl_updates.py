@@ -26,11 +26,11 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 # Create connections.
-conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_thread=False)
+conn_upd = sqlite3.connect(directory + '/' + 'upd_body.db', timeout=10.0, check_same_thread=False)
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.upd_links('updates')
+pid_lnk = ks.utils.getlink.upd_links('upd')
 pids = list(pid_lnk['pid'])
 upd_ids = list(pid_lnk['upd_id'])
 upd_lnks = list(pid_lnk['upd_url'])
@@ -41,7 +41,7 @@ random.shuffle(id_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('record_crawl_body_2')
+record = rec.Record('record_upd_body')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
@@ -63,7 +63,7 @@ def crawler(id):
 
     # save to 'sqlite'
     def _save_df():
-        df_upd.to_sql(name = 'updates', con = conn_upd, if_exists = 'append', index = False)
+        df_upd.to_sql(name = 'upd_body', con = conn_upd, if_exists = 'append', index = False)
         record.save_record(pids[id], id)
 
     # crawling via multiprocessing and queue
