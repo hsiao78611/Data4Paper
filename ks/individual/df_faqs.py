@@ -13,9 +13,10 @@ def df_faqs(faq_soup, pid):
     })
 
     if faq_item != []:
-        for faq in range(len(faq_item)):
+        total = len(faq_item)
+        for faq in range(total):
             try:
-                faq_id = pid + '.' + str(faq)
+                faq_id = pid + '.' + str(total - faq)
                 faq_title = faq_item[faq].find('a', class_='js-faq-question-toggle').text.strip()
                 faq_content = faq_item[faq].find('div', class_='type-14 navy-700 normal').text.strip()
                 faq_date = faq_item[faq].find('time').get('datetime')

@@ -6,6 +6,7 @@ def df_created(crt_soup, cid):
     df = pd.DataFrame({
         'cid': [],
         'pid': [],
+        'no': [],
         'backers_count': [],
         'percent_raised': [],
         'link': [],
@@ -16,10 +17,11 @@ def df_created(crt_soup, cid):
 
     if (crt_soup != None) & (crt_soup != 'non-exist'):
         plist = crt_soup.find_all('div', class_='js-track-project-card')
-
-        for i in range(len(plist)):
+        total = len(plist)
+        for i in range(total):
             try:
                 pid = plist[i].get('data-project_pid')
+                no = total - i
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]
@@ -35,6 +37,7 @@ def df_created(crt_soup, cid):
             df_temp = pd.DataFrame({
                 'cid': [cid],
                 'pid': [pid],
+                'no': [no],
                 'backers_count': [backers_count],
                 'percent_raised': [percent_raised],
                 'link': [link],
