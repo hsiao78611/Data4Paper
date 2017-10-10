@@ -7,6 +7,7 @@ def df_comments(cmt_soup, pid):
         {'pid': [],
          'cmt_id': [],
          'cmt_datetime': [],
+         'cmt_name': [],
          'cmt_profile_id': [],
          'cmt_creator': [],
          'cmt_collaborator': [],
@@ -23,6 +24,7 @@ def df_comments(cmt_soup, pid):
             try:
                 cmt_id = cmt_item[cmt].get('id') if cmt_item[cmt].get('id') != None else 'comment-earliest'
                 cmt_datetime = cmt_item[cmt].find('data').get('data-value')
+                cmt_name  = cmt_item[cmt].find('a', href=re.compile('/profile/')).text
                 cmt_profile_id = cmt_item[cmt].find('a', href=re.compile('/profile/')).get('href').split('/')[-1]
                 cmt_creator = 1 if 'Creator' in cmt_item[cmt].find('span').text else 0
                 cmt_collaborator = u'collaborator' in cmt_item[cmt].get('class')
@@ -37,6 +39,7 @@ def df_comments(cmt_soup, pid):
             {'pid': [pid],
              'cmt_id' : [cmt_id],
              'cmt_datetime' : [cmt_datetime],
+             'cmt_name': [cmt_name],
              'cmt_profile_id' : [cmt_profile_id],
              'cmt_creator': [cmt_creator],
              'cmt_collaborator' : [cmt_collaborator],
