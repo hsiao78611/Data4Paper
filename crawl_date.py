@@ -10,16 +10,16 @@ import urllib2
 import time
 import numpy
 
-import functions.individual.proj_crawler
-import functions.utils.renewip as new
-import functions.utils.record as rec
-import functions.utils.getlink
-import functions.utils.useragents as ua
+import packages.individual.proj_crawler
+import packages.utils.renewip as new
+import packages.utils.record as rec
+import packages.utils.getlink
+import packages.utils.useragents as ua
 
 
 # list of successful projects
-proj_lnks = list(functions.utils.getlink.proj_links('need_add')['proj_url'])
-pids = list(functions.utils.getlink.proj_links('need_add')['pid'])
+proj_lnks = list(packages.utils.getlink.proj_links('need_add')['proj_url'])
+pids = list(packages.utils.getlink.proj_links('need_add')['pid'])
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

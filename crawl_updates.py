@@ -6,11 +6,11 @@ import random
 from random import randint
 import pandas as pd
 
-import functions.individual.upd_crawler
-import functions.utils.renewip as new
-import functions.utils.record as rec
-import functions.utils.getlink
-from functions.utils.alnum import get_current_datetime
+import packages.individual.upd_crawler
+import packages.utils.renewip as new
+import packages.utils.record as rec
+import packages.utils.getlink
+from packages.utils.alnum import get_current_datetime
 
 # thread-based Pool
 from multiprocessing.dummy import Pool
@@ -30,7 +30,7 @@ conn_upd = sqlite3.connect(directory + '/' + 'upd_body.db', timeout=10.0, check_
 
 
 # list of successful projects
-pid_lnk = functions.utils.getlink.upd_links('re_upd_body')
+pid_lnk = packages.utils.getlink.upd_links('re_upd_body')
 pids = list(pid_lnk['pid'])
 upd_ids = list(pid_lnk['upd_id'])
 upd_lnks = list(pid_lnk['upd_url'])
@@ -56,7 +56,7 @@ def crawler(id):
     start_time = time.time()
 
     # dataframe
-    df_upd = functions.individual.upd_crawler.update('https://www.kickstarter.com' + upd_lnk, pid, upd_id)
+    df_upd = packages.individual.upd_crawler.update('https://www.kickstarter.com' + upd_lnk, pid, upd_id)
     print 'loading ' + pid + ': ' + str(upd_id) + ': https://www.kickstarter.com' + upd_lnk
     exe_time = time.time() - start_time
     print exe_time

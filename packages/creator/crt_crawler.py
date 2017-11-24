@@ -5,16 +5,16 @@ import signal
 
 from bs4 import BeautifulSoup, SoupStrainer
 
-import functions.utils.renewip as new
-import functions.utils.scrollpage as sc
-import functions.utils.setwebdriver as sw
-import functions.utils.useragents as ua
+import packages.utils.renewip as new
+import packages.utils.scrollpage as sc
+import packages.utils.setwebdriver as sw
+import packages.utils.useragents as ua
 
-from functions.individual.df_comments import df_comments
-from functions.creator.df_about import df_about
-from functions.creator.df_backed import df_backed
-from functions.creator.df_created import df_created
-from functions.creator.df_comments import df_comments
+from packages.individual.df_comments import df_comments
+from packages.creator.df_about import df_about
+from packages.creator.df_backed import df_backed
+from packages.creator.df_created import df_created
+from packages.creator.df_comments import df_comments
 
 # get a random agent
 agents_lst = ua.get_user_agents()

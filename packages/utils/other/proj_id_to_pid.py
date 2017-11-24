@@ -1,4 +1,4 @@
-import functions.utils.getlink
+import packages.utils.getlink
 import re
 import os
 import sqlite3
@@ -10,8 +10,8 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 # list of successful projects
-proj_lnks = list(functions.utils.getlink.proj_links()['link'])
-pids = list(functions.utils.getlink.proj_links()['pid'])
+proj_lnks = list(packages.utils.getlink.proj_links()['link'])
+pids = list(packages.utils.getlink.proj_links()['pid'])
 
 # for date_funding
 # create connections of database.
