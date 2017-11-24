@@ -32,8 +32,8 @@ if not os.path.exists(directory):
 #         df.to_csv(directory + '/' + file_name, mode='a', index=False, header=False, encoding='utf-8-sig')
 
 # Create connections.
-# conn_proj = sqlite3.connect(directory + '/' + 'proj.db', timeout=10.0, check_same_thread=False)
-# conn_rew = sqlite3.connect(directory + '/' + 'rew.db', timeout=10.0, check_same_thread=False)
+conn_proj = sqlite3.connect(directory + '/' + 'proj.db', timeout=10.0, check_same_thread=False)
+conn_rew = sqlite3.connect(directory + '/' + 'rew.db', timeout=10.0, check_same_thread=False)
 conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_thread=False)
 conn_faq = sqlite3.connect(directory + '/' + 'faq.db', timeout=10.0, check_same_thread=False)
 # conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db', timeout=10.0, check_same_thread=False)
@@ -67,24 +67,24 @@ def crawler(id):
     print 'loading ' + pid + ': ' + proj_lnks[id]
 
     # dataframe
-    # proj_rew = proj.project_rewards()
-    # df_proj = proj_rew[0]
-    # df_rew = proj_rew[1]
+    proj_rew = proj.project_rewards()
+    df_proj = proj_rew[0]
+    df_rew = proj_rew[1]
     df_upd = proj.updates()
     df_faq = proj.faqs()
-    # df_cmt = proj.comments()
+    df_cmt = proj.comments()
     exe_time = time.time() - start_time
     print exe_time
     # df_time = pd.DataFrame({'pid': [pid], 'exe_time': [exe_time]})
 
     # save to 'sqlite'
     def _save_df():
-        # df_proj.to_sql(name = 'proj', con = conn_proj, if_exists = 'append', index = False)
-        # df_rew.to_sql(name = 'rew', con = conn_rew, if_exists = 'append', index = False)
+        df_proj.to_sql(name = 'proj', con = conn_proj, if_exists = 'append', index = False)
+        df_rew.to_sql(name = 'rew', con = conn_rew, if_exists = 'append', index = False)
         df_upd.to_sql(name = 'upd', con = conn_upd, if_exists = 'append', index = False)
         df_faq.to_sql(name='faq', con=conn_faq, if_exists='append', index=False)
-        # df_cmt.to_sql(name = 'cmt', con = conn_cmt, if_exists = 'append', index = False)
-        # df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
+        df_cmt.to_sql(name = 'cmt', con = conn_cmt, if_exists = 'append', index = False)
+        df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
         # record what already be loaded
         record.save_record(pids[id], id) #proj.total_cmt, proj.count_visible_cmt)
 
@@ -116,11 +116,11 @@ except Exception as e:
     traceback.print_exc()
     print get_current_datetime()
 
-# conn_proj.close()
-# conn_rew.close()
+conn_proj.close()
+conn_rew.close()
 conn_upd.close()
 conn_faq.close()
-# conn_cmt.close()
-# conn_time.close()
+conn_cmt.close()
+conn_time.close()
 
 # Queue, refered from: https://stackoverflow.com/questions/3827065/can-i-use-a-multiprocessing-queue-in-a-function-called-by-pool-imap
