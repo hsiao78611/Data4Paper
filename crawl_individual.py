@@ -36,8 +36,8 @@ conn_proj = sqlite3.connect(directory + '/' + 'proj.db', timeout=10.0, check_sam
 conn_rew = sqlite3.connect(directory + '/' + 'rew.db', timeout=10.0, check_same_thread=False)
 conn_upd = sqlite3.connect(directory + '/' + 'upd.db', timeout=10.0, check_same_thread=False)
 conn_faq = sqlite3.connect(directory + '/' + 'faq.db', timeout=10.0, check_same_thread=False)
-# conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db', timeout=10.0, check_same_thread=False)
-# conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_same_thread=False)
+conn_cmt = sqlite3.connect(directory + '/' + 'cmt.db', timeout=10.0, check_same_thread=False)
+conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_same_thread=False)
 
 
 # list of successful projects
