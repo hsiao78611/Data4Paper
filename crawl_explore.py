@@ -6,10 +6,10 @@ import random
 from random import randint
 import pandas as pd
 
-import ks.utils.getcategory
-import ks.explore.exp_crawler
-import ks.utils.renewip as new
-import ks.utils.record as rec
+import functions.utils.getcategory
+import functions.explore.exp_crawler
+import functions.utils.renewip as new
+import functions.utils.record as rec
 
 # create a directory
 directory = os.getcwd() + '/' + 'RECORD' # datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -20,7 +20,7 @@ if not os.path.exists(directory):
 conn_ov = sqlite3.connect(directory + '/' + 'overview.db')
 conn_exp = sqlite3.connect(directory + '/' + 'explore.db')
 
-cats = ks.utils.getcategory.get_category()
+cats = functions.utils.getcategory.get_category()
 print 'got categories'
 # randomise crawling order
 cats_lst = range(len(cats))
@@ -47,7 +47,7 @@ while cats_lst:
 
         print 'crawling: ' + cat + ', with goal ' + str(goal)
         start_time = time.time()
-        exp = ks.explore.exp_crawler.Category(cat_id, goal)
+        exp = functions.explore.exp_crawler.Category(cat_id, goal)
 
         # calculate processing time
         exe_time = time.time() - start_time

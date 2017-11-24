@@ -6,7 +6,7 @@ import urllib2
 
 from random import randint
 from selenium import webdriver
-import ks.utils.useragents as ua
+import functions.utils.useragents as ua
 
 def _get_agent():
     # get a new agent

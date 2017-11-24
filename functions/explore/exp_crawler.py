@@ -3,10 +3,10 @@ from random import randint
 import re
 import time
 
-from ks.explore.df_explore import df_explore
-import ks.utils.setwebdriver as sw
-import ks.utils.scrollpage as sc
-import ks.utils.renewip as new
+from functions.explore.df_explore import df_explore
+import functions.utils.setwebdriver as sw
+import functions.utils.scrollpage as sc
+import functions.utils.renewip as new
 
 
 ks_link = 'https://www.kickstarter.com/discover/advanced?state=successful&category_id={}&goal={}&sort=end_date&seed={}&page=1'

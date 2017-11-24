@@ -4,15 +4,15 @@ import time
 from bs4 import BeautifulSoup, SoupStrainer
 import signal
 
-import ks.utils.renewip as new
-import ks.utils.scrollpage as sc
-import ks.utils.setwebdriver as sw
-import ks.utils.useragents as ua
-from ks.individual.df_comments import df_comments
-from ks.individual.df_faqs import df_faqs
-from ks.individual.df_project import df_project
-from ks.individual.df_rewards import df_rewards
-from ks.individual.df_updates import df_updates
+import functions.utils.renewip as new
+import functions.utils.scrollpage as sc
+import functions.utils.setwebdriver as sw
+import functions.utils.useragents as ua
+from functions.individual.df_comments import df_comments
+from functions.individual.df_faqs import df_faqs
+from functions.individual.df_project import df_project
+from functions.individual.df_rewards import df_rewards
+from functions.individual.df_updates import df_updates
 
 
 class Campaign:

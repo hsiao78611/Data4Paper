@@ -6,11 +6,11 @@ import random
 from random import randint
 import pandas as pd
 
-import ks.individual.proj_crawler
-import ks.utils.renewip as new
-import ks.utils.record as rec
-import ks.utils.getlink
-from ks.utils.alnum import get_current_datetime
+import functions.individual.proj_crawler
+import functions.utils.renewip as new
+import functions.utils.record as rec
+import functions.utils.getlink
+from functions.utils.alnum import get_current_datetime
 
 # thread-based Pool
 from multiprocessing.dummy import Pool
@@ -41,7 +41,7 @@ conn_faq = sqlite3.connect(directory + '/' + 'faq.db', timeout=10.0, check_same_
 
 
 # list of successful projects
-pid_lnk = ks.utils.getlink.proj_links('re_upd_faq_26229')
+pid_lnk = functions.utils.getlink.proj_links('re_upd_faq_26229')
 proj_lnks = list(pid_lnk['proj_url'])
 pids = list(pid_lnk['pid'])
 
@@ -63,7 +63,7 @@ def crawler(id):
     # used to record processing time
     start_time = time.time()
 
-    proj = ks.individual.proj_crawler.Campaign(proj_lnks[id], pid)
+    proj = functions.individual.proj_crawler.Campaign(proj_lnks[id], pid)
     print 'loading ' + pid + ': ' + proj_lnks[id]
 
     # dataframe
