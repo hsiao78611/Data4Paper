@@ -23,7 +23,7 @@ def update(upd_link, pid, upd_id):
     headers = {'User-Agent': user_agent}
 
     # communicate with TOR via a local proxy (privoxy)
-    new.renew_connection()
+    # new.renew_connection()
 
     # Speeding up BeautifulSoup by using SoupStrainer and lxml parser
     request = urllib2.Request(upd_link, None, headers)

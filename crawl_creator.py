@@ -31,7 +31,7 @@ conn_about = sqlite3.connect(directory + '/' + 'about.db', timeout=10.0, check_s
 
 # list of creators
 crt_ids = packages.utils.getlink.crt_links('backer_id')
-cids = list(crt_ids['backer_id'])
+cids = list(crt_ids['cmt_profile_id'])
 # pids = ist(crt_ids['pid'])
 
 # randomise crawling order'
