@@ -97,7 +97,7 @@ def scroll_down_backed(driver):
     pages = total / 36 + (1 if total % 36 > 0 else 0)
     while page != pages:
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        page = len(driver.find_elements_by_xpath('//*[@id="list"]/div/ul/li'))
+        page = page + 1 # len(driver.find_elements_by_xpath('//*[@id="list"]/div/ul/li'))
 
 
 def scroll_down_users_comment(driver):

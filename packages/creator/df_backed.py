@@ -9,7 +9,6 @@ def df_backed(bac_soup, cid):
         'backers_count': [],
         'percent_raised': [],
         'link': [],
-        'category': [],
         'title': [],
         'creator': [],
         'creator_link': [],
@@ -25,13 +24,11 @@ def df_backed(bac_soup, cid):
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]
-                category = re.sub('^http://www.kickstarter.com/discover/categories/', '',
-                                  plist[i].find('a', class_='navy-600').get('href')).split('?')[0]
-                title = re.sub('[:$]', '', plist[i].find('a', class_='navy-700').text)
+                title = plist[i].find('a', class_='soft-black hover-text-underline').text
                 project_state = plist[i].get('data-project_state')
                 crt_name = plist[i].find('span', class_='bold')
-                creator = crt_name.text if crt_name != None else plist[i].find('a', class_='navy-700 medium').text
-                creator_link = plist[i].find_all('a')[-1].get('href') if crt_name != None else plist[i].find('a', class_='navy-700 medium').get('href').split('?')[0]
+                creator = crt_name.text if crt_name != None else plist[i].find('a', class_='soft-black hover-text-underline medium').text
+                creator_link = plist[i].find_all('a')[-1].get('href') if crt_name != None else plist[i].find('a', class_='soft-black hover-text-underline medium').get('href').split('?')[0]
             except Exception as e:
                 print 'backed ' + cid + ' of project may have a problem.'
                 print e
@@ -42,7 +39,6 @@ def df_backed(bac_soup, cid):
                 'backers_count': [backers_count],
                 'percent_raised': [percent_raised],
                 'link': [link],
-                'category': [category],
                 'title': [title],
                 'project_state': [project_state],
                 'creator': [creator],
