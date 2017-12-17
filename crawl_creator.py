@@ -76,12 +76,12 @@ def crawler(id):
         record.save_record(pids[id], id)
         record.save_record(cids[id], id)
 
-    # crawling one by one
-    _save_df()
+    # # crawling one by one
+    # _save_df()
 
-    # # crawling via multiprocessing and queue
-    # # put it in a queue then get a permission
-    # crawler.que.put(_save_df())
+    # crawling via multiprocessing and queue
+    # put it in a queue then get a permission
+    crawler.que.put(_save_df())
 
 
 # setting an attribute named 'que' on the function object 'crawler'
@@ -90,23 +90,33 @@ def worker(queue):
 
 if __name__ == '__main__':
 
-    # crawling one by one
-    while crt_lst:
-        id = crt_lst.pop()
-        crawler(id)
+    # # crawling one by one
+    # while crt_lst:
+    #     id = crt_lst.pop()
+    #     crawler(id)
 
-    # # crawling via multiprocessing and queue
-    # try:
-    #     the_queue = Queue()
-    #     pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-    #     pool.imap(crawler, crt_lst)
-    #     pool.close()
-    #     while True:
-    #         the_queue.get(True)
-    # except Exception as e:
-    #     print e
-    #     traceback.print_exc()
-    #     print get_current_datetime()
+    # crawling via multiprocessing and queue
+    try:
+        new.renew_connection()
+
+        the_queue = Queue()
+        pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
+        pool.imap(crawler, crt_lst)
+        pool.close()
+        count = 0
+        while True:
+            lim = randint(2, 4)
+            time.sleep(randint(3, 8))
+
+            if count > lim:
+                new.renew_connection()
+                count = 0
+            the_queue.get(True)
+            count = count + 1
+    except Exception as e:
+        print e
+        traceback.print_exc()
+        print get_current_datetime()
 
     conn_about.close()
     conn_backed.close()

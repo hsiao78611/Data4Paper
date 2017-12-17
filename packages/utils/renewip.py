@@ -8,7 +8,8 @@ import time
 from stem import Signal
 from stem.control import Controller
 
-requestIP = "http://icanhazip.com/" # ipinfo.io/ip/"
+# requestIP = "http://ipinfo.io/ip/"
+requestIP = "http://icanhazip.com/"
 
 def _request(url):
     # communicate with TOR via a local proxy (privoxy)
