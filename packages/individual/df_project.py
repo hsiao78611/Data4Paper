@@ -7,7 +7,7 @@ def df_project(proj_soup, pid):
     proj_amount_pledged, proj_currency, proj_start_date, \
     proj_end_date, proj_category, proj_subcategory, proj_backer_count, \
     proj_comment_count, proj_update_count, proj_faq_count, proj_creator_id, \
-    proj_creator_name, proj_location = (None,) * 17
+    proj_creator_name, proj_location, proj_body = (None,) * 18
 
     try:
         proj_title = proj_soup.find('a', class_ = 'hero__link').text

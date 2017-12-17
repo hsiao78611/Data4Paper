@@ -41,7 +41,7 @@ conn_time = sqlite3.connect(directory + '/' + 'time.db', timeout=10.0, check_sam
 
 
 # list of successful projects
-pid_lnk = packages.utils.getlink.proj_links('re_body')
+pid_lnk = packages.utils.getlink.proj_links('re_body_1213')
 proj_lnks = list(pid_lnk['proj_url'])
 pids = list(pid_lnk['pid'])
 
@@ -63,7 +63,9 @@ def crawler(id):
     # used to record processing time
     start_time = time.time()
 
-    proj = packages.individual.proj_crawler.Campaign(proj_lnks[id], pid)
+    time.sleep(0 + randint(0,5))
+
+    proj = packages.individual.proj_crawler.Campaign(proj_lnks[id].replace(' ',''), pid)
     print 'loading ' + pid + ': ' + proj_lnks[id]
 
     # dataframe
@@ -86,35 +88,35 @@ def crawler(id):
         df_cmt.to_sql(name = 'cmt', con = conn_cmt, if_exists = 'append', index = False)
         df_time.to_sql(name = 'exe_time', con = conn_time, if_exists = 'append', index = False)
         # record what already be loaded
-        record.save_record(pids[id], id) #proj.total_cmt, proj.count_visible_cmt)
+        record.save_record(pids[id], id, proj.total_cmt, proj.count_visible_cmt)
 
-    # crawling via multiprocessing and queue
-    # put it in a queue then get a permission
-    crawler.que.put(_save_df())
+    # # crawling via multiprocessing and queue
+    # # put it in a queue then get a permission
+    # crawler.que.put(_save_df())
 
-    # # crawling one by one
-    # _save_df()
+    # crawling one by one
+    _save_df()
 
-# # crawling one by one
-# while id_lst:
-#     id = id_lst.pop()
-#     crawler(id)
+# crawling one by one
+while id_lst:
+    id = id_lst.pop()
+    crawler(id)
 
-# crawling via multiprocessing and queue
-def worker(queue):
-    crawler.que = queue
-
-try:
-    the_queue = Queue()
-    pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
-    pool.imap(crawler, id_lst)
-    pool.close()
-    while True:
-        the_queue.get(True)
-except Exception as e:
-    print e
-    traceback.print_exc()
-    print get_current_datetime()
+# # crawling via multiprocessing and queue
+# def worker(queue):
+#     crawler.que = queue
+#
+# try:
+#     the_queue = Queue()
+#     pool = Pool(cpu_count() + 2, worker,[the_queue])  # Can create a Pool with cpu_count * 2 threads.
+#     pool.imap(crawler, id_lst)
+#     pool.close()
+#     while True:
+#         the_queue.get(True)
+# except Exception as e:
+#     print e
+#     traceback.print_exc()
+#     print get_current_datetime()
 
 conn_proj.close()
 conn_rew.close()

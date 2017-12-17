@@ -73,7 +73,7 @@ def crawler(id):
         df_backed.to_sql(name = 'backed', con = conn_backed, if_exists = 'append', index = False)
         df_created.to_sql(name = 'created', con = conn_created, if_exists = 'append', index = False)
         # record what already be loaded
-        record.save_record(pids[id], id)
+        # record.save_record(pids[id], id)
         record.save_record(cids[id], id)
 
     # # crawling one by one
