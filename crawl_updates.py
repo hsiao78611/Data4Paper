@@ -26,11 +26,11 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 # Create connections.
-conn_upd = sqlite3.connect(directory + '/' + 'upd_body.db', timeout=10.0, check_same_thread=False)
+conn_upd = sqlite3.connect(directory + '/' + 'upd_body_0511.db', timeout=10.0, check_same_thread=False)
 
 
 # list of successful projects
-pid_lnk = packages.utils.getlink.upd_links('re_upd_body')
+pid_lnk = packages.utils.getlink.upd_links('re_ub_0511')
 pids = list(pid_lnk['pid'])
 upd_ids = list(pid_lnk['upd_id'])
 upd_lnks = list(pid_lnk['upd_url'])
@@ -41,7 +41,7 @@ random.shuffle(id_lst)
 
 # if there exists the record, load it.
 # then remove(pop) the index of crawled data
-record = rec.Record('record_upd_body')
+record = rec.Record('record_upd_body_0103')
 rec_df = record.get_record()
 if not rec_df.empty:
     rec_index = list(set(list(rec_df['index'])))
@@ -56,14 +56,23 @@ def crawler(id):
     start_time = time.time()
 
     # dataframe
-    df_upd = packages.individual.upd_crawler.update('https://www.kickstarter.com' + upd_lnk, pid, upd_id)
-    print 'loading ' + pid + ': ' + str(upd_id) + ': https://www.kickstarter.com' + upd_lnk
+    if upd_lnk != None:
+        df_upd = packages.individual.upd_crawler.update('https://www.kickstarter.com' + upd_lnk, pid, upd_id)
+        print 'loading ' + pid + ': ' + str(upd_id) + ': https://www.kickstarter.com' + upd_lnk
+    else:
+        df_upd = pd.DataFrame(
+            {'pid': [pid],
+             'upd_id': [str(upd_id)],
+             'upd_url': ['sys_upd'],
+             'upd_body': ['sys_upd']
+             })
+        print 'loading ' + pid + ': ' + str(upd_id) + ' None'
     exe_time = time.time() - start_time
     print exe_time
 
     # save to 'sqlite'
     def _save_df():
-        df_upd.to_sql(name = 'upd_body', con = conn_upd, if_exists = 'append', index = False)
+        df_upd.to_sql(name = 'upd_body_0103', con = conn_upd, if_exists = 'append', index = False)
         record.save_record(pids[id], id)
 
     # # crawling via multiprocessing and queue

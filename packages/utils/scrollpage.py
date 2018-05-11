@@ -92,7 +92,8 @@ def scroll_down_explore(driver, total):
 
 
 def scroll_down_backed(driver):
-    total = int(re.sub('[^\d]', '', driver.find_element_by_xpath('//*[@id="main_content"]/div[3]/div/div/div/ul/li[2]/a/span').text))
+    total = int(re.sub('[^\d]', '', driver.find_element_by_xpath(
+        '//*[@id="main_content"]/div[3]/div/div/div/ul/li[2]/a/span').text))
     page = 1
     pages = total / 36 + (1 if total % 36 > 0 else 0)
     while page != pages:
@@ -100,9 +101,16 @@ def scroll_down_backed(driver):
         time.sleep(2)
         page = len(driver.find_elements_by_xpath('//*[@id="list"]/div/ul/li'))
 
+# def scroll_down_created(driver):
+#         # scroll down and click
+#         _scroll_down(driver, '//*[@id="content"]/div/div[1]/a[3]')
+#         time.sleep(2)
 
-def scroll_down_users_comment(driver):
-    total = int(driver.find_element_by_xpath('//*[@id="main_content"]/div[3]/div/div/div/ul/li[3]/a/span').text)
-    while total != cmt_count:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        cmt_count = len(driver.find_elements_by_xpath('//*[@id="activity"]/li'))
+
+
+
+# def scroll_down_users_comment(driver):
+#     total = int(driver.find_element_by_xpath('//*[@id="main_content"]/div[3]/div/div/div/ul/li[3]/a/span').text)
+#     while total != cmt_count:
+#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#         cmt_count = len(driver.find_elements_by_xpath('//*[@id="activity"]/li'))
