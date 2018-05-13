@@ -26,11 +26,11 @@ if not os.path.exists(directory):
 
 # Create connections.
 conn_about = sqlite3.connect(directory + '/' + 'about.db', timeout=10.0, check_same_thread=False)
-# conn_backed = sqlite3.connect(directory + '/' + 'backed.db', timeout=10.0, check_same_thread=False)
-# conn_created = sqlite3.connect(directory + '/' + 'created.db', timeout=10.0, check_same_thread=False)
+conn_backed = sqlite3.connect(directory + '/' + 'backed.db', timeout=10.0, check_same_thread=False)
+conn_created = sqlite3.connect(directory + '/' + 'created.db', timeout=10.0, check_same_thread=False)
 
 # list of creators
-crt_ids = packages.utils.getlink.crt_links('re_backer_name_0511')
+crt_ids = packages.utils.getlink.crt_links('creator_id')
 cids = list(crt_ids['cid'])#'cmt_profile_id'])
 # pids = list(crt_ids['pid'])
 
@@ -63,8 +63,8 @@ def crawler(id):
 
     # dataframe
     df_about = crt.about()
-    # df_backed = crt.backed()
-    # df_created = crt.created()
+    df_backed = crt.backed()
+    df_created = crt.created()
 
     exe_time = time.time() - start_time
     print exe_time
@@ -72,10 +72,10 @@ def crawler(id):
     # save to 'sqlite'
     def _save_df():
         df_about.to_sql(name = 'about', con = conn_about, if_exists = 'append', index = False)
-        # df_backed.to_sql(name = 'backed', con = conn_backed, if_exists = 'append', index = False)
-        # df_created.to_sql(name = 'created', con = conn_created, if_exists = 'append', index = False)
+        df_backed.to_sql(name = 'backed', con = conn_backed, if_exists = 'append', index = False)
+        df_created.to_sql(name = 'created', con = conn_created, if_exists = 'append', index = False)
         # record what already be loaded
-        # record.save_record(pids[id], id)
+        record.save_record(pids[id], id)
         record.save_record(cids[id], id)
 
     # crawling one by one
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     #     print get_current_datetime()
 
     conn_about.close()
-    # conn_backed.close()
-    # conn_created.close()
+    conn_backed.close()
+    conn_created.close()
 
 
