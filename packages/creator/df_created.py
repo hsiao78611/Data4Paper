@@ -6,6 +6,7 @@ def df_created(crt_soup, cid):
     df = pd.DataFrame({
         'cid': [],
         'pid': [],
+        'no': [],
         'backers_count': [],
         'percent_raised': [],
         'link': [],
@@ -19,6 +20,7 @@ def df_created(crt_soup, cid):
         for i in range(total):
             try:
                 pid = plist[i].get('data-project_pid')
+                no = total - i
                 backers_count = plist[i].get('data-project_backers_count')
                 percent_raised = plist[i].get('data-project_percent_raised')
                 link = plist[i].find('a').get('href').split('?')[0]
@@ -31,6 +33,7 @@ def df_created(crt_soup, cid):
             df_temp = pd.DataFrame({
                 'cid': [cid],
                 'pid': [pid],
+                'no': [no],
                 'backers_count': [backers_count],
                 'percent_raised': [percent_raised],
                 'link': [link],
